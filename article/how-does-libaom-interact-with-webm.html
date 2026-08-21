@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does Libaom Interact With WebM? - libaom</title>
+    <meta name="description" content="This article provides a technical overview of how the libaom reference encoder interacts with the WebM container format. It explores how AV1 video data produced by libaom is structured, multiplexed, and stored within WebM's Matroska-based framework. Unde">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-interact-with-webm">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does Libaom Interact With WebM? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-interact-with-webm" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides a technical overview of how the libaom reference encoder interacts with the WebM container format. It explores how AV1 video data produced by libaom is structured, multiplexed, and stored within WebM's Matroska-based framework. Unde" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-interact-with-webm">How Does Libaom Interact
+With WebM?</h1>
+<p>This article provides a technical overview of how the
+<code>libaom</code> reference encoder interacts with the WebM container
+format. It explores how AV1 video data produced by <code>libaom</code>
+is structured, multiplexed, and stored within WebM's Matroska-based
+framework. Understanding this interaction is essential for developers
+optimizing open-source, high-efficiency web video streaming
+pipelines.</p>
+<h3 id="the-role-of-libaom-and-webm-in-video-delivery">The Role of
+Libaom and WebM in Video Delivery</h3>
+<p>To understand how these two technologies interact, it helps to first
+separate the video compressor from the file wrapper.</p>
+<ul>
+<li><strong>Libaom</strong> is the official, open-source reference
+software library maintained by the Alliance for Open Media (AOMedia).
+Its primary job is to compress raw video frames into a highly efficient
+<strong>AV1 (AOMedia Video 1)</strong> elementary bitstream.</li>
+<li><strong>WebM</strong> is a restricted subset of the Matroska (MKV)
+container format designed specifically for the web. Sponsored by Google,
+it acts as the digital envelope that holds the compressed video and
+audio tracks together, ensuring they can be synchronized and streamed
+efficiently by web browsers.</li>
+</ul>
+<h3 id="the-multiplexing-process">The Multiplexing Process</h3>
+<p>The interaction between <code>libaom</code> and WebM happens during a
+process called <strong>multiplexing</strong> (or muxing). When you
+compress a video using a tool like FFmpeg or a dedicated media
+development kit, the software orchestrates a specific handoff between
+the encoder and the container writer:</p>
+<ol type="1">
+<li><strong>Bitstream Generation:</strong> <code>libaom</code> processes
+raw video frames and outputs compressed AV1 data structured as Temporal
+Units (TUs), which contain Open Bitstream Units (OBUs).</li>
+<li><strong>Packetization:</strong> The muxing software extracts these
+OBUs from <code>libaom</code>.</li>
+<li><strong>Container Mapping:</strong> The software wraps these packets
+into WebM "SimpleBlock" or "BlockGroup" structures according to the
+official AV1 mapping specifications for Matroska/WebM.</li>
+</ol>
+<h3 id="key-technical-touchpoints">Key Technical Touchpoints</h3>
+<p>For <code>libaom</code> encoded video to live happily inside a WebM
+file, several container-level parameters must be precisely configured to
+match the encoder's output.</p>
+<h4 id="codec-identification">Codec Identification</h4>
+<p>Inside the WebM file header, the video track's <code>CodecID</code>
+must be explicitly set to <code>V_AV1</code>. This tells the downstream
+media player or browser that the upcoming video packets require an AV1
+decoder (like <code>libdav1d</code> or a hardware decoder) rather than a
+VP8 or VP9 decoder.</p>
+<h4 id="codec-private-data">Codec Private Data</h4>
+<p>The WebM container requires a <code>CodecPrivate</code> element in
+the track header. For <code>libaom</code> video, this element contains
+the AV1 <code>Sequence Header OBU</code>. This data provides the player
+with critical, foundational configuration details before playback even
+begins, such as:</p>
+<ul>
+<li>Profile and level definitions</li>
+<li>Video resolution (width and height)</li>
+<li>Color space and subsampling layout (e.g., YUV 4:2:0)</li>
+<li>Color depth (8-bit, 10-bit, or 12-bit)</li>
+</ul>
+<h4 id="keyframe-alignment-and-seeking">Keyframe Alignment and
+Seeking</h4>
+<p><code>libaom</code> periodically produces Keyframes (or Intra frames)
+to allow users to skip to different parts of a video. The WebM container
+must accurately flag these specific blocks as "keyframe" packets. WebM
+uses these flags to build its internal index cluster
+(<code>Cues</code>), mapping timestamps directly to the byte positions
+of <code>libaom</code> keyframes so seeking is instantaneous and
+accurate during web playback.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

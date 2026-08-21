@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does Libaom Handle Constrained Quality Mode? - libaom</title>
+    <meta name="description" content="Constrained Quality (CQ) mode in the libaom AV1 reference encoder balances perceptual video quality and file size constraints by combining a variable Constant Rate Factor (CRF) target with a hard upper bitrate cap. This article explains how libaom proces">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-handle-constrained-quality-mode">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does Libaom Handle Constrained Quality Mode? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-handle-constrained-quality-mode" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Constrained Quality (CQ) mode in the libaom AV1 reference encoder balances perceptual video quality and file size constraints by combining a variable Constant Rate Factor (CRF) target with a hard upper bitrate cap. This article explains how libaom proces" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-handle-constrained-quality-mode">How Does Libaom
+Handle Constrained Quality Mode?</h1>
+<p>Constrained Quality (CQ) mode in the libaom AV1 reference encoder
+balances perceptual video quality and file size constraints by combining
+a variable Constant Rate Factor (CRF) target with a hard upper bitrate
+cap. This article explains how libaom processes video frames under this
+rate control method, explores its technical execution via encoding
+parameters, and breaks down when to deploy it effectively over other
+allocation methods.</p>
+<h3 id="the-mechanics-of-constrained-quality-control">The Mechanics of
+Constrained Quality Control</h3>
+<p>Libaom treats Constrained Quality mode as a hybrid between pure
+Constant Quality and Average Bitrate (ABR) encoding. When configured,
+the encoder evaluates each video frame based on its visual complexity,
+allocating bits dynamically to maintain a uniform level of fidelity
+across the entire stream.</p>
+<ul>
+<li><strong>Under the Bitrate Cap:</strong> For standard,
+low-complexity, or highly repetitive scenes, libaom uses the assigned
+CRF value to determine the appropriate quantization step sizes. The
+final bitrate during these scenes naturally floats below the maximum
+limit, maximizing data efficiency without wasting bits on imperceptible
+details.</li>
+<li><strong>Hitting the Bitrate Cap:</strong> When the video introduces
+high-complexity content—such as rapid camera pans, explosions, or heavy
+film grain—the frame demands an immense amount of data to sustain the
+target CRF. If the required data spikes past the user-defined threshold,
+libaom dynamically shifts priorities. It prioritizes the bit envelope
+over visual consistency, aggressively raising the quantization index
+(<span class="math inline">\(Q\)</span>) to compress the complex frame
+down until it safely satisfies the bitrate cap.</li>
+</ul>
+<h3 id="implementing-cq-mode-in-libaom">Implementing CQ Mode in
+Libaom</h3>
+<p>To utilize Constrained Quality mode in tools like FFmpeg using the
+<code>libaom-av1</code> wrapper, the encoder requires both a target
+quality level and a non-zero bitrate value.</p>
+<p>In a standard FFmpeg command, this is structured as follows:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-i</span> input.mp4 <span class="at">-c:v</span> libaom-av1 <span class="at">-crf</span> 30 <span class="at">-b:v</span> 2000k output.mkv</span></code></pre></div>
+<p>In this deployment:</p>
+<ul>
+<li>The <code>-crf</code> option sets the baseline perceptual quality
+factor on a scale from 0 to 63, where lower numbers indicate higher
+quality.</li>
+<li>The <code>-b:v</code> parameter acts as the strict upper bound
+constraint. If this value were set to <code>0</code>, libaom would
+interpret the command as pure Constant Quality mode instead.</li>
+</ul>
+<p>Alternatively, developers can define strict boundaries by
+establishing a narrow bit boundary utilizing the <code>-minrate</code>
+and <code>-maxrate</code> flags alongside the maximum bitrate setting to
+tightly govern how the encoder targets fluctuating network states.</p>
+<h3 id="best-use-cases-for-constrained-quality">Best Use Cases for
+Constrained Quality</h3>
+<p>Constrained Quality mode is the ideal framework for mass storage and
+variable streaming delivery networks. In large-scale video-on-demand
+(VOD) archival or bulk media processing workflows, purely constant
+bitrates waste immense disk space on simple talking-head scenes, while
+pure CRF encoding risks creating localized, massive file spikes that
+cause network buffering.</p>
+<p>By employing libaom's CQ mode, system architects can ensure that
+simple videos take up a fraction of the storage footprint while
+guaranteeing that complex video assets remain strictly beneath delivery
+infrastructure ceilings.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

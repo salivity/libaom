@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does libaom Use Warped Motion Compensation? - libaom</title>
+    <meta name="description" content="Libaom, the open-source reference encoder for the AV1 video codec, leverages warped motion compensation (WMC) to significantly improve compression efficiency by addressing complex, non-translational motion. Traditional video encoders typically account fo">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-use-warped-motion-compensation">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does libaom Use Warped Motion Compensation? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-use-warped-motion-compensation" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Libaom, the open-source reference encoder for the AV1 video codec, leverages warped motion compensation (WMC) to significantly improve compression efficiency by addressing complex, non-translational motion. Traditional video encoders typically account fo" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-use-warped-motion-compensation">How Does libaom
+Use Warped Motion Compensation?</h1>
+<p>Libaom, the open-source reference encoder for the AV1 video codec,
+leverages warped motion compensation (WMC) to significantly improve
+compression efficiency by addressing complex, non-translational motion.
+Traditional video encoders typically account for simple horizontal and
+vertical movement between frames using standard motion vectors. However,
+libaom utilizes WMC to model advanced geometric transformations such as
+zooming, rotation, shearing, and perspective changes. By mathematically
+projecting how an object deforms or rotates over time, the encoder can
+predict subsequent frames with high precision, drastically reducing the
+amount of residual data that needs to be compressed and transmitted.</p>
+<h3 id="the-limits-of-standard-motion-compensation">The Limits of
+Standard Motion Compensation</h3>
+<p>In traditional video coding, motion compensation relies on
+translational block matching. The encoder divides a frame into blocks
+and searches for a matching block in a previously encoded reference
+frame, describing the movement with a simple two-dimensional vector
+<span class="math inline">\((x, y)\)</span>.</p>
+<p>While this works well for flat, linear movement across the screen, it
+fails efficiently compress dynamic camera movements. When a camera pans
+diagonally while zooming out, or when an object rotates, a simple
+translational vector cannot accurately describe the change. The encoder
+is then forced to code a large amount of residual error (the difference
+between the prediction and the actual frame), which consumes a
+significant amount of bitrate.</p>
+<h3 id="entering-warped-motion-compensation-wmc">Entering Warped Motion
+Compensation (WMC)</h3>
+<p>To overcome the limitations of standard block matching, libaom
+implements warped motion compensation. Instead of assuming every pixel
+in a block moves uniformly in two dimensions, WMC applies affine and
+global motion models to predict how blocks change shape and
+orientation.</p>
+<p>Libaom primarily utilizes two higher-order motion models:</p>
+<ul>
+<li><strong>Affine Motion Models:</strong> These models account for
+rotation, zooming, and shearing. An affine transform can map a square
+block of pixels in a reference frame into a parallelogram in the current
+frame, accurately capturing objects that are spinning or changing
+size.</li>
+<li><strong>Global Motion Estimation (GME):</strong> This feature
+identifies motion that applies to the entire frame, which is highly
+common during camera pans, tilts, and zooms. By calculating a single set
+of warping parameters for the whole frame, libaom can apply these
+transformations globally, saving the bits that would otherwise be spent
+signaling individual motion vectors for every block.</li>
+</ul>
+<h3 id="how-libaom-calculates-and-applies-warping">How libaom Calculates
+and Applies Warping</h3>
+<p>The process of utilizing WMC within libaom involves a multi-step
+estimation and filtering pipeline designed to balance compression gains
+with computational complexity:</p>
+<ol type="1">
+<li><strong>Parameter Estimation:</strong> The encoder analyzes the
+relationship between the current frame and reference frames to estimate
+warping parameters (such as rotation angles or zoom factors). This is
+often done using a sample of motion vectors or project block
+matching.</li>
+<li><strong>Model Setup:</strong> Libaom sets up a system of equations
+to determine the transformation matrix. For a full affine model, six
+parameters are calculated to map the pixel coordinates <span
+class="math inline">\((x, y)\)</span> from the reference frame to the
+new coordinates <span class="math inline">\((x&#39;, y&#39;)\)</span> in
+the current frame.</li>
+<li><strong>Warped Inter-Prediction:</strong> Once the parameters are
+established, libaom warps the reference block to match the predicted
+shape in the current frame. Because warped pixel coordinates rarely land
+perfectly on integer pixel grid lines, libaom uses advanced 8-tap
+interpolation filters to accurately calculate sub-pixel values.</li>
+<li><strong>Rate-Distortion Optimization (RDO):</strong> Finally, libaom
+evaluates whether using WMC is worth the computational and bitrate cost.
+It compares the bitrate required to signal the warping parameters plus
+the remaining residual data against the bitrate required for standard
+translational motion. If WMC yields a better rate-distortion trade-off,
+it is selected.</li>
+</ol>
+<h3 id="impact-on-compression-efficiency">Impact on Compression
+Efficiency</h3>
+<p>By accurately predicting complex motion, libaom minimizes the
+prediction residual—the "error" image that must be encoded via frequency
+transforms and quantization. Because the warped prediction is incredibly
+close to the actual target frame, the residual contains very little
+energy, allowing the encoder to discard more data without a noticeable
+loss in visual quality. This sophisticated handling of motion is a
+primary reason why the AV1 codec achieves substantially higher
+compression efficiency than its predecessors, delivering clear,
+high-definition video at significantly lower bitrates.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

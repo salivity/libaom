@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does Libaom Implement Palette Prediction? - libaom</title>
+    <meta name="description" content="Libaom, the reference software encoder for the AV1 video coding format, implements palette prediction as a specialized intra-coding tool designed to dramatically improve compression efficiency for screen content, such as computer desktops, text, and user">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-implement-palette-prediction">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does Libaom Implement Palette Prediction? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-implement-palette-prediction" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Libaom, the reference software encoder for the AV1 video coding format, implements palette prediction as a specialized intra-coding tool designed to dramatically improve compression efficiency for screen content, such as computer desktops, text, and user" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-implement-palette-prediction">How Does Libaom
+Implement Palette Prediction?</h1>
+<p>Libaom, the reference software encoder for the AV1 video coding
+format, implements palette prediction as a specialized intra-coding tool
+designed to dramatically improve compression efficiency for screen
+content, such as computer desktops, text, and user interfaces. Unlike
+natural video, screen content features sharp edges, flat regions, and a
+highly restricted number of unique colors. The libaom encoder approaches
+palette prediction by isolating these distinct color sets, mapping block
+pixels to specific color indices, and using a smart palette cache based
+on neighboring blocks to minimize the bitrate overhead required to
+signal color tables.</p>
+<h2 id="1-candidate-evaluation-and-block-constraints">1. Candidate
+Evaluation and Block Constraints</h2>
+<p>Libaom does not attempt palette prediction on every part of a video
+frame because the mode is computationally expensive. It first runs a
+screening mechanism to detect whether the frame contains screen content.
+When active, libaom restricts palette mode to blocks that meet specific
+size constraints. Palette prediction is allowed only on blocks that are
+at least 8x8 in size and do not exceed 64x64 in either width or height.
+If these structural criteria are met, the encoder triggers candidate
+injection to build the local color tables.</p>
+<h2 id="2-color-selection-via-clustering-and-histograms">2. Color
+Selection via Clustering and Histograms</h2>
+<p>To establish the actual palette for a valid coding block, libaom
+evaluates up to eight dominant colors using two primary searching
+techniques:</p>
+<ul>
+<li><strong>Most Dominant Colors Search:</strong> The encoder creates a
+localized color histogram of the pixels within the target block. It
+identifies the most frequently occurring colors to serve as base palette
+candidates.</li>
+<li><strong>K-Means Clustering:</strong> For blocks with more complex
+color distributions or slight gradients, libaom executes an iterative
+K-means clustering algorithm (running up to 50 iterations). This groups
+similar pixel values together and calculates the centroids of those
+clusters to establish representative base colors.</li>
+</ul>
+<p>Through these combined searches, libaom determines an optimal palette
+size ranging between 2 and 8 base colors for each video plane (Y, U, and
+V). Pixels inside the block are then converted into an index map
+corresponding to these selected colors.</p>
+<h2 id="3-the-palette-predictor-cache-and-signaling">3. The Palette
+Predictor Cache and Signaling</h2>
+<p>Directly transmitting a brand-new color table for every block would
+generate a massive amount of overhead, neutralizing the compression
+gains. To solve this, libaom manages a predictor cache at both the
+encoder and decoder levels.</p>
+<p>The cache keeps track of the colors utilized in previously encoded
+neighboring blocks. When evaluating a new block, libaom checks its newly
+generated palette against the cache. If a color matches an entry in the
+cache, the encoder simply transmits a reuse flag. If a color is entirely
+new, it is explicitly signaled. By transmitting a bitmask of reused
+colors and only encoding the delta values for new entries, libaom
+significantly reduces the bitstream footprint required for screen
+content coding.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

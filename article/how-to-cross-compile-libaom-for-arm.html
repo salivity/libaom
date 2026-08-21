@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Cross-Compile libaom for ARM? - libaom</title>
+    <meta name="description" content="Cross-compiling libaom (the Alliance for Open Media AV1 codec library) for ARM architectures allows you to build efficient video encoding and decoding software for embedded devices, smartphones, and Raspberry Pi boards from a standard x8664 host machine.">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-to-cross-compile-libaom-for-arm">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Cross-Compile libaom for ARM? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-to-cross-compile-libaom-for-arm" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Cross-compiling libaom (the Alliance for Open Media AV1 codec library) for ARM architectures allows you to build efficient video encoding and decoding software for embedded devices, smartphones, and Raspberry Pi boards from a standard x8664 host machine." />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-cross-compile-libaom-for-arm">How to Cross-Compile libaom
+for ARM?</h1>
+<p>Cross-compiling <code>libaom</code> (the Alliance for Open Media AV1
+codec library) for ARM architectures allows you to build efficient video
+encoding and decoding software for embedded devices, smartphones, and
+Raspberry Pi boards from a standard x86_64 host machine. This process
+requires a proper toolchain, the CMake build system, and specific
+configuration flags to target the correct ARM architecture (such as
+ARMv7 or AArch64). By configuring the build environment correctly, you
+can generate optimized binaries tailored for your target hardware.</p>
+<h3 id="prerequisites-and-toolchain-setup">Prerequisites and Toolchain
+Setup</h3>
+<p>Before starting, you need a host system (typically Linux x86_64)
+equipped with the necessary cross-compiler. For ARM architectures, the
+GNU Toolchain is the standard choice.</p>
+<ul>
+<li><strong>For 64-bit ARM (AArch64/ARM64):</strong> Install
+<code>aarch64-linux-gnu-gcc</code> and
+<code>aarch64-linux-gnu-g++</code>.</li>
+<li><strong>For 32-bit ARM (ARMv7/HF):</strong> Install
+<code>arm-linux-gnueabihf-gcc</code> and
+<code>arm-linux-gnueabihf-g++</code>.</li>
+<li><strong>Build Tools:</strong> Ensure <code>cmake</code>,
+<code>make</code> (or <code>ninja</code>), and <code>git</code> are
+installed on your host system.</li>
+</ul>
+<p>On Debian or Ubuntu-based systems, you can install these via apt:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install git cmake ninja-build gcc-aarch64-linux-gnu g++-aarch64-linux-gnu</span></code></pre></div>
+<h3 id="fetching-the-libaom-source-code">Fetching the libaom Source
+Code</h3>
+<p>Clone the official <code>libaom</code> repository from the Alliance
+for Open Media Git server and navigate into the directory:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://aomedia.googlesource.com/aom</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> aom</span></code></pre></div>
+<h3 id="configuring-cmake-for-arm-cross-compilation">Configuring CMake
+for ARM Cross-Compilation</h3>
+<p><code>libaom</code> uses CMake toolchain files to handle
+cross-compilation. The repository includes pre-configured toolchain
+files for common architectures inside the
+<code>build/cmake/toolchains/</code> directory.</p>
+<p>Create a separate build directory to keep the source tree clean:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> build_arm64 <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> build_arm64</span></code></pre></div>
+<p>Execute the CMake command, pointing to the appropriate toolchain
+file. For a 64-bit ARM target using Ninja as the generator, run:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cmake</span> .. <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-G</span> Ninja <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-DCMAKE_TOOLCHAIN_FILE</span><span class="op">=</span>../build/cmake/toolchains/arm64-linux-gcc.cmake <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-DCONFIG_RUNTIME_CPU_DETECT</span><span class="op">=</span>0 <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-DENABLE_DOCS</span><span class="op">=</span>OFF <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-DENABLE_EXAMPLES</span><span class="op">=</span>OFF <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-DENABLE_TESTS</span><span class="op">=</span>OFF</span></code></pre></div>
+<h3 id="key-configuration-flags">Key Configuration Flags</h3>
+<ul>
+<li><strong>CMAKE_TOOLCHAIN_FILE:</strong> Specifies the path to the
+target architecture configuration (e.g.,
+<code>arm64-linux-gcc.cmake</code> or
+<code>armv7-linux-gcc.cmake</code>).</li>
+<li><strong>CONFIG_RUNTIME_CPU_DETECT:</strong> Setting this to
+<code>0</code> disables runtime CPU feature detection, hardcoding
+optimizations for the specified target and reducing binary size. Set to
+<code>1</code> if you need a generic binary that detects specific ARM
+extensions (like NEON) at runtime.</li>
+<li><strong>ENABLE_DOCS / EXAMPLES / TESTS:</strong> Disabling these
+features speeds up the compilation process significantly and prevents
+compilation errors related to host-run target binaries.</li>
+</ul>
+<h3 id="compiling-and-installing">Compiling and Installing</h3>
+<p>Once CMake successfully generates the build files, start the
+compilation process:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ninja</span></span></code></pre></div>
+<p>If you prefer standard Makefiles over Ninja, replace
+<code>-G Ninja</code> with <code>-G "Unix Makefiles"</code> in the CMake
+step, and run <code>make</code> instead.</p>
+<p>After the build completes, compile artifacts (including
+<code>libaom.a</code> and <code>libaom.so</code>) will be available in
+your build directory. To install the binaries and headers to a specific
+staging directory for deployment to your ARM target, use:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">DESTDIR</span><span class="op">=</span>/path/to/your/target/sysroot <span class="ex">ninja</span> install</span></code></pre></div></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

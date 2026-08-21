@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How does the realtime mode in libaom perform for live streaming? - libaom</title>
+    <meta name="description" content="The realtime mode in libaom—the reference AV1 encoder implementation—is designed to deliver the high compression efficiency of the AV1 codec while maintaining the low-latency and high-throughput requirements essential for live streaming and Real-Time">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-the-realtime-mode-in-libaom-perform-for-live-streaming">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How does the realtime mode in libaom perform for live streaming? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-the-realtime-mode-in-libaom-perform-for-live-streaming" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The realtime mode in libaom—the reference AV1 encoder implementation—is designed to deliver the high compression efficiency of the AV1 codec while maintaining the low-latency and high-throughput requirements essential for live streaming and Real-Time" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="how-does-the-realtime-mode-in-libaom-perform-for-live-streaming">How
+does the realtime mode in libaom perform for live streaming?</h1>
+<p>The realtime mode in <code>libaom</code>—the reference AV1 encoder
+implementation—is designed to deliver the high compression efficiency of
+the AV1 codec while maintaining the low-latency and high-throughput
+requirements essential for live streaming and Real-Time Communications
+(RTC). By heavily optimizing the encoder pipeline, bypassing
+computationally expensive partition types, and aggressively prioritizing
+speed over exhaustive search tools, <code>libaom</code> in realtime mode
+successfully achieves sub-frame encoding times. While it historically
+carried a reputation for being too slow for live deployment, continuous
+algorithmic updates have turned it into a viable, bandwidth-saving
+alternative to traditional codecs like H.264 and VP9 for live
+broadcasts.</p>
+<h2 id="architectural-trade-offs-and-speed-presets">Architectural
+Trade-offs and Speed Presets</h2>
+<p>In standard high-efficiency modes (such as <code>--good</code> or VoD
+encoding), <code>libaom</code> evaluates a vast matrix of block
+partitions, complex compound prediction modes, and multi-frame temporal
+filters to maximize data compression. For live streaming, this
+exhaustive approach is impossible. Activating the
+<code>--usage=realtime</code> flag completely shifts the encoder's
+behavior.</p>
+<p>The performance of <code>libaom</code> in this mode is dictated by
+the <code>--cpu-used</code> parameter, which generally ranges from 5 to
+11 for live environments.</p>
+<ul>
+<li><strong>Speed 5 to 7:</strong> Focuses on maintaining a balance
+between high visual quality and computational cost. It leverages basic
+AV1 tools but disables highly complex asymmetric partitions.</li>
+<li><strong>Speed 8 to 11:</strong> Drastically strips down the encoding
+process. The encoder disables rectangular partition searches, limits
+motion vector search ranges, and heavily utilizes early-termination
+strategies to process frames quickly enough for 30 or 60
+frames-per-second (fps) execution.</li>
+</ul>
+<h2 id="bandwidth-efficiency-vs-compute-cost">Bandwidth Efficiency vs.
+Compute Cost</h2>
+<p>When properly tuned, <code>libaom</code>'s realtime mode delivers
+roughly 30% to 40% better compression than H.264 at equivalent visual
+quality tiers. This compression advantage directly translates to lower
+ingest and egress bandwidth costs for live streaming platforms.</p>
+<p>However, this efficiency comes at a higher CPU cost. Even in its
+fastest realtime presets, <code>libaom</code> requires significantly
+more compute power than legacy encoders like <code>libx264</code>. To
+mitigate this, developers frequently deploy <code>libaom</code>
+alongside hardware extensions—such as Arm Neon/SVE2 or Intel AVX2 vector
+instructions—which allow multi-threaded software architectures to handle
+1080p live streams on modern multi-core server processors.</p>
+<h2 id="handling-real-time-challenges">Handling Real-Time
+Challenges</h2>
+<p>Live streaming applications encounter unpredictable network
+fluctuations and unique visual content, both of which
+<code>libaom</code>'s realtime mode addresses via specialized tools:</p>
+<ul>
+<li><strong>Low-Latency Rate Control:</strong> Realtime mode
+incorporates single-pass rate control (CBR or constrained VBR) that
+strictly prevents bitrate spikes. This keeps the stream within the
+network's throughput limits and avoids frame drops.</li>
+<li><strong>Screen Content Coding (SCC):</strong> For game streaming or
+live desktop sharing, <code>libaom</code> dynamically activates SCC
+tools. These tools optimize the encoding of sharp edges, text, and flat
+graphics, providing massive quality boosts and bitrate savings over
+standard camera-captured video.</li>
+<li><strong>Zero-Latency Reference Frames:</strong> Unlike traditional
+multi-pass configurations that rely on future frames for forward
+prediction, the realtime mode restricts motion estimation to past
+reference frames. This eliminates encoder-induced frame delay,
+facilitating instantaneous video transmission.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

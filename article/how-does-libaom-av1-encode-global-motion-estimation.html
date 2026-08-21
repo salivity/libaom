@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does libaom AV1 Encode Global Motion Estimation? - libaom</title>
+    <meta name="description" content="This article provides an overview of the Global Motion Estimation (GME) process within the Alliance for Open Media's reference encoder, libaom, for the AV1 video codec. It covers the core algorithmic pipeline, from initial feature detection and keypoint">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-av1-encode-global-motion-estimation">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does libaom AV1 Encode Global Motion Estimation? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-av1-encode-global-motion-estimation" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the Global Motion Estimation (GME) process within the Alliance for Open Media's reference encoder, libaom, for the AV1 video codec. It covers the core algorithmic pipeline, from initial feature detection and keypoint" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-av1-encode-global-motion-estimation">How Does
+libaom AV1 Encode Global Motion Estimation?</h1>
+<p>This article provides an overview of the Global Motion Estimation
+(GME) process within the Alliance for Open Media's reference encoder,
+libaom, for the AV1 video codec. It covers the core algorithmic
+pipeline, from initial feature detection and keypoint matching to robust
+model estimation and final motion parameter verification. Understanding
+this workflow highlights how AV1 achieves significant compression gains
+by identifying and neutralizing camera movements like panning, tilting,
+and zooming across entire video frames.</p>
+<h3 id="feature-detection-and-keypoint-extraction">Feature Detection and
+Keypoint Extraction</h3>
+<p>The GME process in libaom begins by analyzing the current frame and a
+reference frame to locate distinct points of interest. The encoder
+typically employs feature detection algorithms, such as wrapped versions
+of <strong>FAST</strong> (Features from Accelerated Segment Test) or
+<strong>Corner Detection</strong>, to identify robust pixel
+configurations. These keypoints are selected because they remain
+recognizable even after structural modifications or changes in
+lighting.</p>
+<h3 id="feature-matching-and-correspondence">Feature Matching and
+Correspondence</h3>
+<p>Once keypoints are extracted from both the source and reference
+frames, libaom establishes correspondences between them. The encoder
+tracks or matches these features across frames using methods like
+<strong>Optical Flow</strong> (e.g., Lucas-Kanade) or block-matching
+techniques. This step yields a sparse set of motion vectors that
+represent how specific local points have shifted between the two
+frames.</p>
+<h3 id="robust-model-estimation-with-ransac">Robust Model Estimation
+with RANSAC</h3>
+<p>Because local motion vectors often contain outliers—such as moving
+objects that do not conform to the background camera movement—libaom
+utilizes the <strong>RANSAC</strong> (Random Sample Consensus)
+algorithm. RANSAC iteratively selects random subsets of the matched
+keypoints to compute potential global motion models. The algorithms
+evaluate several transformation models defined by the AV1
+specification:</p>
+<ul>
+<li><strong>Translation:</strong> Simple horizontal and vertical
+shifting (2 parameters).</li>
+<li><strong>Affine:</strong> Handles rotation, scaling, and shearing
+alongside translation (6 parameters).</li>
+<li><strong>Rotzoom:</strong> Simplifies the affine model to focus
+strictly on rotation and scaling (4 parameters).</li>
+</ul>
+<p>The model that successfully secures the highest number of "inliers"
+(local vectors that align with the global motion hypothesis within a
+given threshold) is chosen as the primary candidate.</p>
+<h3 id="parameter-refinement-and-error-evaluation">Parameter Refinement
+and Error Evaluation</h3>
+<p>After RANSAC identifies the best global motion model, libaom refines
+the calculated parameters to maximize compression efficiency. The
+encoder performs a localized pixel-level or sub-pixel refinement, often
+using gradient descent methods, to minimize the <strong>Sum of Absolute
+Differences (SAD)</strong> or <strong>Variance of Differences</strong>
+between the motion-compensated reference frame and the source frame.</p>
+<h3 id="rate-distortion-optimization-rdo-decision">Rate-Distortion
+Optimization (RDO) Decision</h3>
+<p>The final stage in the libaom GME pipeline is the Rate-Distortion
+Optimization check. Global motion parameters require a small amount of
+overhead bit-rate to be signaled in the frame header. The encoder
+compares the bit cost and resulting distortion of using the estimated
+global motion parameters against standard local block-based motion
+vectors or skipping motion compensation entirely. If the GME model
+reduces the overall rate-distortion cost, the parameters are written
+into the AV1 bitstream, allowing blocks across the entire frame to
+reference this global movement efficiently.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

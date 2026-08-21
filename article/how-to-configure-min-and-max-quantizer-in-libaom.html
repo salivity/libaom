@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Configure Min and Max Quantizer in libaom? - libaom</title>
+    <meta name="description" content="Configuring the minimum and maximum quantizer bounds allows video engineers to maintain precise control over video quality and file sizes during AV1 encoding. This article provides a comprehensive overview of how to set these limits using the native aome">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-to-configure-min-and-max-quantizer-in-libaom">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Configure Min and Max Quantizer in libaom? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-to-configure-min-and-max-quantizer-in-libaom" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring the minimum and maximum quantizer bounds allows video engineers to maintain precise control over video quality and file sizes during AV1 encoding. This article provides a comprehensive overview of how to set these limits using the native aome" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-configure-min-and-max-quantizer-in-libaom">How to
+Configure Min and Max Quantizer in libaom?</h1>
+<p>Configuring the minimum and maximum quantizer bounds allows video
+engineers to maintain precise control over video quality and file sizes
+during AV1 encoding. This article provides a comprehensive overview of
+how to set these limits using the native <code>aomenc</code>
+command-line utility, FFmpeg's <code>libaom-av1</code> wrapper, and
+direct C API integrations.</p>
+<h3 id="understanding-quantizer-bounds-in-av1">Understanding Quantizer
+Bounds in AV1</h3>
+<p>In the AV1 codec architecture, the quantizer parameter (often called
+<code>qindex</code>) dictates the compression level applied to the video
+frames. The values range strictly from <strong>0</strong> to
+<strong>63</strong>, where:</p>
+<ul>
+<li><strong>0</strong> represents the highest quality (essentially
+lossless compression).</li>
+<li><strong>63</strong> represents the lowest quality and maximum
+compression.</li>
+</ul>
+<p>By capping these values, you prevent the encoder from producing
+overly bloated files during complex scenes (by setting a minimum
+<code>q</code>) or generating unwatchable, heavily pixelated frames
+during high-motion sequences (by setting a maximum <code>q</code>).</p>
+<h3 id="method-1-using-the-native-aomenc-cli">Method 1: Using the Native
+aomenc CLI</h3>
+<p>If you are encoding directly with the standalone Alliance for Open
+Media reference encoder (<code>aomenc</code>), the parameters are
+defined explicitly using explicit quantizer flags.</p>
+<ul>
+<li><strong>Minimum Quantizer:</strong>
+<code>--min-q=&lt;value&gt;</code></li>
+<li><strong>Maximum Quantizer:</strong>
+<code>--max-q=&lt;value&gt;</code></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aomenc</span> <span class="at">--end-usage</span><span class="op">=</span>vbr <span class="at">--target-bitrate</span><span class="op">=</span>2000 <span class="at">--min-q</span><span class="op">=</span>15 <span class="at">--max-q</span><span class="op">=</span>45 <span class="at">-o</span> output.webm input.y4m</span></code></pre></div>
+<p>In this scenario, <code>aomenc</code> will adjust the bitrate targets
+but will never use a quality index sharper than 15 or more degraded than
+45.</p>
+<h3 id="method-2-encoding-via-ffmpeg-libaom-av1">Method 2: Encoding via
+FFmpeg (libaom-av1)</h3>
+<p>When using FFmpeg with the <code>libaom-av1</code> library wrapper,
+the options inherit generic FFmpeg codec properties. You configure the
+boundaries using the standard <code>-qmin</code> and <code>-qmax</code>
+flags.</p>
+<ul>
+<li><strong>Minimum Quantizer:</strong>
+<code>-qmin &lt;value&gt;</code></li>
+<li><strong>Maximum Quantizer:</strong>
+<code>-qmax &lt;value&gt;</code></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-i</span> input.mp4 <span class="at">-c:v</span> libaom-av1 <span class="at">-b:v</span> 2M <span class="at">-qmin</span> 18 <span class="at">-qmax</span> 40 output.mkv</span></code></pre></div>
+<p>Alternatively, you can pass these parameters directly to the
+underlying library through the <code>-aom-params</code> global mapping
+flag:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-i</span> input.mp4 <span class="at">-c:v</span> libaom-av1 <span class="at">-b:v</span> 2M <span class="at">-aom-params</span> min-q=18:max-q=40 output.mkv</span></code></pre></div>
+<h3 id="method-3-programmatic-configuration-via-c-api">Method 3:
+Programmatic Configuration via C API</h3>
+<p>For software applications integrating the <code>libaom</code> library
+natively, configuring the quantizer range requires altering the encoder
+configuration structure (<code>aom_codec_enc_cfg_t</code>) before
+initializing the codec context.</p>
+<p>The configuration fields responsible for boundary control are
+<code>rc_min_quantizer</code> and <code>rc_max_quantizer</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;aom/aom_encoder.h&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;aom/aomcx.h&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>aom_codec_enc_cfg_t cfg<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>aom_codec_enc_config_default<span class="op">(</span>aom_codec_av1_cx<span class="op">(),</span> <span class="op">&amp;</span>cfg<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Restrict the quantizer scale between 20 and 50</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>rc_min_quantizer <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>cfg<span class="op">.</span>rc_max_quantizer <span class="op">=</span> <span class="dv">50</span><span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Initialize the encoder context with the modified configuration struct</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>aom_codec_ctx_t codec<span class="op">;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>aom_codec_enc_init<span class="op">(&amp;</span>codec<span class="op">,</span> aom_codec_av1_cx<span class="op">(),</span> <span class="op">&amp;</span>cfg<span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span></code></pre></div>
+<h3 id="best-practices-for-rate-control">Best Practices for Rate
+Control</h3>
+<p>When pairing quantizer limits with different rate control modes, keep
+the following interactions in mind:</p>
+<table>
+<thead>
+<tr>
+<th>Rate Control Mode</th>
+<th>Recommended Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VBR / CBR</strong></td>
+<td>Highly recommended. Setting a <code>-qmax</code> acts as a safety
+valve to ensure quality does not drop below your threshold during spike
+scenes.</td>
+</tr>
+<tr>
+<td><strong>CQ (Constrained Quality)</strong></td>
+<td>Useful to provide a strict cap if the target <code>-crf</code>
+behaves unpredictably on specific source material.</td>
+</tr>
+<tr>
+<td><strong>Pure CRF</strong></td>
+<td>Generally redundant, as the Constant Rate Factor explicitly sets the
+target quality index natively.</td>
+</tr>
+</tbody>
+</table></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

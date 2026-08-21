@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Rate Control Algorithms Are in libaom? - libaom</title>
+    <meta name="description" content="The libaom reference encoder for the AV1 video coding format implements several distinct rate control algorithms designed to balance visual quality and data consumption across various streaming, broadcasting, and archival scenarios. Operating at the sequ">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/what-rate-control-algorithms-are-in-libaom">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What Rate Control Algorithms Are in libaom? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/what-rate-control-algorithms-are-in-libaom" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The libaom reference encoder for the AV1 video coding format implements several distinct rate control algorithms designed to balance visual quality and data consumption across various streaming, broadcasting, and archival scenarios. Operating at the sequ" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-rate-control-algorithms-are-in-libaom">What Rate Control
+Algorithms Are in libaom?</h1>
+<p>The libaom reference encoder for the AV1 video coding format
+implements several distinct rate control algorithms designed to balance
+visual quality and data consumption across various streaming,
+broadcasting, and archival scenarios. Operating at the sequence, frame,
+and block layers, these algorithms govern how quantizer parameters are
+allocated based on specific target constraints and multi-pass analysis.
+This article breaks down the primary rate control modes defined within
+the libaom API and details their targeted use cases.</p>
+<h2 id="the-four-core-rate-control-modes">The Four Core Rate Control
+Modes</h2>
+<p>The underlying infrastructure of libaom specifies rate control modes
+through the <code>aom_rc_mode</code> enumeration. Each mode utilizes
+specialized modeling to determine the base quantizer index (<span
+class="math inline">\(Q\)</span>) for each video frame.</p>
+<h3 id="constant-quality-aom_q">Constant Quality (AOM_Q)</h3>
+<p>In Constant Quality mode, the encoder ignores a target bitrate and
+focuses on maintaining a uniform mathematical quality level throughout
+the video. The user specifies a fixed quantizer parameter, and libaom
+ensures that frame-level quantization remains anchored to this target.
+This algorithm is optimal for archival and local storage where
+predictable quality is required, regardless of file size
+fluctuations.</p>
+<h3 id="variable-bit-rate-aom_vbr">Variable Bit Rate (AOM_VBR)</h3>
+<p>The Variable Bit Rate algorithm adjusts quantization dynamically
+based on temporal and spatial complexity, allowing bit distribution to
+peak during high-motion or detailed scenes and drop during static
+sequences. It optimizes data allocation across the entire video timeline
+to meet a global target average bitrate. It is most efficient when used
+in multi-pass configurations, making it the preferred mode for
+video-on-demand (VoD) streaming.</p>
+<h3 id="constant-bit-rate-aom_cbr">Constant Bit Rate (AOM_CBR)</h3>
+<p>The Constant Bit Rate algorithm utilizes a strict virtual buffer
+model to ensure the output data rate remains highly uniform over time.
+It continuously tracks the fullness of this hypothetical buffer and
+aggressively modifies quantization frame-by-frame (and block-by-block)
+to prevent underflow or overflow. This rate control algorithm is vital
+for low-delay live streaming and real-time communications (RTC) where
+network capacity is tightly capped.</p>
+<h3 id="constrained-quality-aom_cq">Constrained Quality (AOM_CQ)</h3>
+<p>Constrained Quality is a hybrid algorithm that seeks to deliver a
+target visual quality level while imposing a maximum bitrate ceiling.
+The encoder attempts to maintain the requested quality (<span
+class="math inline">\(Q\)</span> value) but will automatically increase
+quantization and degrade the quality if a complex scene threatens to
+violate the defined maximum bitrate constraint. This is widely used in
+streaming environments to prevent sudden bandwidth spikes.</p>
+<h2 id="multi-pass-architecture-and-adaptive-quantization">Multi-Pass
+Architecture and Adaptive Quantization</h2>
+<p>The performance of these rate control algorithms is further augmented
+by architectural layers within libaom that dictate how content
+complexity is evaluated.</p>
+<ul>
+<li><strong>Pass Configurations:</strong> The algorithms can operate in
+single-pass (<code>AOM_RC_ONE_PASS</code>) or multi-pass modes
+(<code>AOM_RC_FIRST_PASS</code>, <code>AOM_RC_SECOND_PASS</code>, and
+<code>AOM_RC_THIRD_PASS</code>). Multi-pass rate control extracts
+detailed statistics during the first pass to plan highly optimized bit
+allocation curves for subsequent passes.</li>
+<li><strong>Adaptive Quantization (AQ-Mode):</strong> Within a single
+frame, libaom applies block-level rate control via its variance-based,
+complexity-based, or cyclic refresh AQ modes. These sub-algorithms
+adjust local quantization factors to shift bits away from visually
+complex textures (where compression artifacts are masked) and toward
+smooth gradients or human faces where distortion is easily noticed by
+viewers.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

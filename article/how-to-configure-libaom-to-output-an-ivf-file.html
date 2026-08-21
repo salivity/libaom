@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Configure libaom to Output an IVF File? - libaom</title>
+    <meta name="description" content="Configuring the libaom encoder to output an IVF (Indeo Video Format) file is a straightforward process that primarily depends on how you interface with the encoder. Because libaom is the reference software library for the AV1 video coding format, it is m">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-to-configure-libaom-to-output-an-ivf-file">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Configure libaom to Output an IVF File? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-to-configure-libaom-to-output-an-ivf-file" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Configuring the libaom encoder to output an IVF (Indeo Video Format) file is a straightforward process that primarily depends on how you interface with the encoder. Because libaom is the reference software library for the AV1 video coding format, it is m" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-configure-libaom-to-output-an-ivf-file">How to Configure
+libaom to Output an IVF File?</h1>
+<p>Configuring the <code>libaom</code> encoder to output an IVF (Indeo
+Video Format) file is a straightforward process that primarily depends
+on how you interface with the encoder. Because <code>libaom</code> is
+the reference software library for the AV1 video coding format, it is
+most commonly utilized through command-line tools like
+<code>aomenc</code> or the popular multimedia framework
+<code>FFmpeg</code>. This article provides a quick overview and
+step-by-step instructions on how to explicitly force <code>libaom</code>
+to wrap its compressed AV1 raw bitstream into an IVF container using
+both methods.</p>
+<h3 id="using-the-native-aomenc-cli">Using the Native aomenc CLI</h3>
+<p>When using the native <code>aomenc</code> command-line tool provided
+directly by the AOMedia Project, container selection is determined by
+your output file extension. The tool automatically detects that you want
+an IVF container when you specify <code>.ivf</code> at the end of your
+output file name.</p>
+<p>An example command looks like this:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">aomenc</span> <span class="at">--codec</span><span class="op">=</span>av1 input.y4m <span class="at">-o</span> output.ivf</span></code></pre></div>
+<p>In this command, <code>aomenc</code> reads the raw video input and
+directly multiplexes the AV1 frames into the IVF format because of the
+<code>-o output.ivf</code> designation.</p>
+<h3 id="using-ffmpeg-with-libaom">Using FFmpeg with libaom</h3>
+<p>If you are using <code>FFmpeg</code> compiled with
+<code>libaom</code> support (<code>--enable-libaom</code>), the process
+is similarly driven by the output file extension. FFmpeg maps the
+extension to its internal muxer.</p>
+<p>To encode a video to AV1 using <code>libaom</code> and target an IVF
+container, use the following syntax:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ffmpeg</span> <span class="at">-i</span> input.mp4 <span class="at">-c:v</span> libaom-av1 output.ivf</span></code></pre></div>
+<ul>
+<li><strong><code>-i input.mp4</code></strong>: Defines your source
+video file.</li>
+<li><strong><code>-c:v libaom-av1</code></strong>: Instructs FFmpeg to
+use the <code>libaom</code> library for AV1 video encoding.</li>
+<li><strong><code>output.ivf</code></strong>: Forces FFmpeg to use the
+IVF muxer to wrap the resulting AV1 elementary stream.</li>
+</ul>
+<h3 id="why-choose-the-ivf-container-for-av1">Why Choose the IVF
+Container for AV1?</h3>
+<p>The IVF container is highly favored during development, testing, and
+debugging phases of AV1 encoding. Unlike complex containers like MP4 or
+MKV, IVF is a very lightweight format that introduces minimal overhead.
+It consists of a simple 32-byte file header followed by 12-byte headers
+for each frame, making it easy to parse and ideal for verifying raw
+encoder output before final distribution muxing.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

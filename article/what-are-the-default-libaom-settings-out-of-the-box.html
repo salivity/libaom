@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What are the default libaom settings out of the box? - libaom</title>
+    <meta name="description" content="The libaom reference encoder for the AV1 video format applies a specific set of stock configurations designed to prioritize maximum compression efficiency and quality metric optimization rather than processing speed. Out of the box, libaom operates under">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/what-are-the-default-libaom-settings-out-of-the-box">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What are the default libaom settings out of the box? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/what-are-the-default-libaom-settings-out-of-the-box" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The libaom reference encoder for the AV1 video format applies a specific set of stock configurations designed to prioritize maximum compression efficiency and quality metric optimization rather than processing speed. Out of the box, libaom operates under" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-are-the-default-libaom-settings-out-of-the-box">What are
+the default libaom settings out of the box?</h1>
+<p>The libaom reference encoder for the AV1 video format applies a
+specific set of stock configurations designed to prioritize maximum
+compression efficiency and quality metric optimization rather than
+processing speed. Out of the box, libaom operates under a strict,
+CPU-intensive baseline that utilizes cautious rate-control bounds and
+minimal multi-threading optimizations unless explicitly commanded
+otherwise. For developers and video engineers deploying libaom without
+custom parameters, understanding these defaults helps explain the
+encoder's exceptionally slow native performance and strict output
+structures.</p>
+<h3 id="rate-control-and-quality-defaults">Rate Control and Quality
+Defaults</h3>
+<p>By default, libaom utilizes structural boundaries that skew toward a
+baseline Constant Quality or standard average bitrate mode depending on
+how the wrapper (such as FFmpeg) calls it, though its core internal
+engine defaults to optimizing for standard distortion metrics.</p>
+<ul>
+<li><strong>Default CRF / Quantizer:</strong> When implemented via
+standard interfaces, the default Constant Rate Factor (CRF) or quantizer
+scale is usually set to <strong>35</strong> (on a scale of 0 to 63).
+This represents a conservative, middle-of-the-road quality
+baseline.</li>
+<li><strong>Tuning Metric:</strong> The out-of-the-box tuning
+configuration is <code>AOM_TUNE_PSNR</code>. The encoder actively
+optimizes structural choices to score well on Peak Signal-to-Noise Ratio
+tests rather than tuning for subjective human vision
+(<code>AOM_TUNE_SSIM</code>) or perceptual frameworks like VMAF.</li>
+</ul>
+<h3 id="speed-and-efficiency-presets">Speed and Efficiency Presets</h3>
+<p>The speed parameter dictates how deeply the encoder searches for
+spatial and temporal redundancies.</p>
+<ul>
+<li><strong>CPU Used Preset:</strong> The <code>--cpu-used</code>
+parameter defaults to <strong>1</strong>. On a scale from 0 (slowest,
+highest quality) to 8 or 9 (fastest), a default of 1 forces the encoder
+to process data with extreme thoroughness. This explains why an
+unconfigured libaom deployment operates significantly slower than
+real-time speed.</li>
+</ul>
+<h3 id="threading-and-partitioning-architecture">Threading and
+Partitioning Architecture</h3>
+<p>Libaom does not automatically parallelize workloads aggressively out
+of the box.</p>
+<ul>
+<li><strong>Multi-threading:</strong> The default thread allocation is
+typically set to <strong>1</strong> thread, or it restricts tile-based
+multi-threading. Features like row-based multi-threading
+(<code>-row-mt</code>) are turned off by default, meaning the encoder
+will underutilize modern multi-core processors unless explicit parallel
+tiles and thread parameters are supplied.</li>
+<li><strong>Partition Sizes:</strong> The internal framework defaults to
+a maximum partition size of <strong>128×128</strong> pixels down to a
+minimum of <strong>4×4</strong> pixels, scanning the structural tree in
+a top-down manner.</li>
+</ul>
+<h3 id="group-of-pictures-gop-and-keyframes">Group of Pictures (GOP) and
+Keyframes</h3>
+<p>Keyframe intervals manage stream seekability and recovery points.</p>
+<ul>
+<li><strong>Maximum Keyframe Distance:</strong> Out of the box, libaom
+defaults to an exceptionally high maximum keyframe interval, often up to
+<strong>9999</strong> frames. Without a tighter maximum interval
+boundary, scene change detection is heavily relied upon, which can lead
+to sparse keyframe distribution and slow seeking behaviors in
+players.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

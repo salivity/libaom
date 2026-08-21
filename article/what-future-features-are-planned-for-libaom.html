@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What future features are planned for libaom? - libaom</title>
+    <meta name="description" content="The open-source libaom library serves as the official reference codec software for AV1 video compression, developed and maintained by the Alliance for Open Media (AOMedia). As the AV1 ecosystem reaches a mature, maintenance-focused phase and attention tr">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/what-future-features-are-planned-for-libaom">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What future features are planned for libaom? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/what-future-features-are-planned-for-libaom" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The open-source libaom library serves as the official reference codec software for AV1 video compression, developed and maintained by the Alliance for Open Media (AOMedia). As the AV1 ecosystem reaches a mature, maintenance-focused phase and attention tr" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-future-features-are-planned-for-libaom">What future
+features are planned for libaom?</h1>
+<p>The open-source libaom library serves as the official reference codec
+software for AV1 video compression, developed and maintained by the
+Alliance for Open Media (AOMedia). As the AV1 ecosystem reaches a
+mature, maintenance-focused phase and attention transitions toward the
+newly finalized AV2 specification, the development roadmap for libaom
+centers heavily on real-time communication (RTC) optimizations, advanced
+perceptual tuning integration, and laying the software groundwork for
+next-generation video architectures.</p>
+<h2 id="perceptual-quality-enhancements-and-tune-iq">Perceptual Quality
+Enhancements and "Tune IQ"</h2>
+<p>A primary focus for recent and upcoming updates to the libaom
+repository involves bridging the gap between mathematical metric
+accuracy and true human visual perception. Historically criticized for
+dropping fine visual details to chase higher structural similarity
+scores, libaom has integrated advanced algorithms derived from
+perceptual forks. Upcoming minor releases will continue refining the
+<strong>AOM_TUNE_IQ</strong> mode, which adjusts the encoder's bit
+allocation using the SSIMULACRA 2 metric as a target. Future work aims
+to mature this mode for broader video streaming applications, utilizing
+variance boosting, adaptive quantization matrices, and smarter
+block-size distributions to preserve textures like film grain and facial
+features without inflating bitrates.</p>
+<h2 id="real-time-communication-rtc-and-speedups">Real-Time
+Communication (RTC) and Speedups</h2>
+<p>Because hardware deployment of AV1 decoding has become ubiquitous,
+the software development for libaom is prioritizing the optimization of
+live encoding pathways. The development pipeline targets high-speed
+configurations, specifically speeds 7 through 11, which are critical for
+live video conferencing and interactive cloud gaming. Planned feature
+updates include:</p>
+<ul>
+<li><strong>Enhanced Screen Content Detection:</strong> Smarter
+algorithms to instantly distinguish between camera footage and synthetic
+desktop windows, triggering intra block copy tools dynamically.</li>
+<li><strong>Advanced SVC Architecture:</strong> Improved logic for
+Scalable Video Coding (SVC), adding more efficient frame-dropping modes
+to prevent video stuttering on congested network pipelines.</li>
+<li><strong>Color Artifact Reduction:</strong> Ongoing optimization of
+the Constrained Directional Enhancement Filter (CDEF) to eliminate color
+bleeding at high speed-presets.</li>
+</ul>
+<h2 id="arm-and-architecture-specific-assembly-code">Arm and
+Architecture-Specific Assembly Code</h2>
+<p>To improve the power consumption profile of libaom, developers are
+steadily replacing generic C code with hardware-targeted optimizations.
+Upcoming releases emphasize deep support for the Arm architecture,
+adding widespread SVE (Scalable Vector Extension) and SVE2 assembly
+code. This ongoing work is designed to significantly accelerate high
+bit-depth (10-bit and 12-bit) encoding paths on modern mobile and server
+processors.</p>
+<h2 id="transition-towards-av2-and-the-aom-video-model-avm">Transition
+Towards AV2 and the AOM Video Model (AVM)</h2>
+<p>With AOMedia officially finalizing the AV2 video standard
+specification, the nature of core libaom development is shifting. While
+libaom remains the production standard for AV1, its underlying
+architectural research is migrating to the AOM Video Model (AVM)
+repository, effectively a "libaom-av2." Over the coming cycles,
+structural maintenance updates to libaom will ensure backward
+compatibility and security stabilization, while experimental coding
+tools tested within the libaom codebase will be migrated or adapted for
+the upcoming generation of AV2 reference implementations.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

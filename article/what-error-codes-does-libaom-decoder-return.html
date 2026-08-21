@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What error codes does libaom decoder return? - libaom</title>
+    <meta name="description" content="When integrating the Alliance for Open Media (AOM) libaom decoder into a video application, developers must properly handle library-specific error codes to ensure playback stability and graceful degradation. This article details the primary error codes r">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/what-error-codes-does-libaom-decoder-return">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What error codes does libaom decoder return? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/what-error-codes-does-libaom-decoder-return" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When integrating the Alliance for Open Media (AOM) libaom decoder into a video application, developers must properly handle library-specific error codes to ensure playback stability and graceful degradation. This article details the primary error codes r" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-error-codes-does-libaom-decoder-return">What error codes
+does libaom decoder return?</h1>
+<p>When integrating the Alliance for Open Media (AOM) libaom decoder
+into a video application, developers must properly handle
+library-specific error codes to ensure playback stability and graceful
+degradation. This article details the primary error codes returned by
+the libaom decoding API, specifically focusing on the
+<code>aom_codec_err_t</code> enum type. We will examine critical error
+types, including memory allocation failures, corrupt bitstream errors,
+and initialization misconfigurations, providing context on when they
+occur and how developers should respond to them.</p>
+<hr />
+<h2 id="the-aom_codec_err_t-enumeration">The
+<code>aom_codec_err_t</code> Enumeration</h2>
+<p>The libaom API communicates the success or failure of its operations
+using the <code>aom_codec_err_t</code> status code type. Functions like
+<code>aom_codec_decode</code> and <code>aom_codec_control</code> return
+these values to indicate whether the frame was processed successfully or
+if an anomaly occurred.</p>
+<h3 id="critical-decoding-errors-to-watch-for">Critical Decoding Errors
+to Watch For</h3>
+<p>While a successful operation returns <code>AOM_CODEC_OK</code> (0),
+developers must implement robust error handling for the following
+negative or non-zero statuses:</p>
+<ul>
+<li><p><strong><code>AOM_CODEC_CORRUPT_FRAME</code></strong></p></li>
+<li><p><strong>What it means:</strong> The decoder encountered invalid,
+malformed, or missing data while parsing the compressed AV1
+bitstream.</p></li>
+<li><p><strong>When it happens:</strong> This is common during network
+streaming packet loss, file corruption, or when dealing with an
+uncompliant encoder.</p></li>
+<li><p><strong>Developer Action:</strong> Depending on application
+requirements, you can choose to drop the frame, request a keyframe from
+the source, or conceal the error. If the
+<code>AOM_CODEC_CAP_ERROR_CONCEALMENT</code> capability is enabled, the
+decoder may still produce a viewable, albeit degraded, frame.</p></li>
+<li><p><strong><code>AOM_CODEC_MEM_ERROR</code></strong></p></li>
+<li><p><strong>What it means:</strong> The library failed to allocate
+necessary memory dynamically.</p></li>
+<li><p><strong>When it happens:</strong> This typically occurs during
+decoder initialization or when a sudden resolution change in the video
+stream forces the allocator to request a larger frame buffer than the
+system can provide.</p></li>
+<li><p><strong>Developer Action:</strong> Safely tear down the decoder
+instance using <code>aom_codec_destroy</code>, release associated
+resources, and alert the application layer of an out-of-memory
+state.</p></li>
+<li><p><strong><code>AOM_CODEC_INVALID_PARAM</code></strong></p></li>
+<li><p><strong>What it means:</strong> An invalid parameter or argument
+was passed to an API function.</p></li>
+<li><p><strong>When it happens:</strong> This is frequently encountered
+when using the <code>aom_codec_control()</code> interface with an
+unsupported control ID, or when passing out-of-bounds configuration
+values to <code>aom_codec_dec_cfg_t</code>.</p></li>
+<li><p><strong>Developer Action:</strong> Audit the initialization
+parameters and control IDs. Ensure that the control macros being used
+are explicitly designed for the decoder interface rather than the
+encoder interface.</p></li>
+<li><p><strong><code>AOM_CODEC_UNSUP_BITSTREAM</code></strong></p></li>
+<li><p><strong>What it means:</strong> The bitstream uses features,
+profiles, or bit-depths that the current build or version of libaom does
+not support.</p></li>
+<li><p><strong>When it happens:</strong> This occurs if a high-profile
+AV1 video (such as 12-bit HDR) is fed into a libaom binary that was
+compiled with restricted profile support or older legacy
+versions.</p></li>
+<li><p><strong>Developer Action:</strong> Reject the stream early and
+inform the user or media pipeline that the specific video profile is
+unsupported.</p></li>
+<li><p><strong><code>AOM_CODEC_ERROR</code></strong></p></li>
+<li><p><strong>What it means:</strong> A generic, unspecified error
+occurred during execution.</p></li>
+<li><p><strong>When it happens:</strong> This functions as a fallback
+error code when an operation fails due to internal library states that
+do not fall neatly into predefined categories.</p></li>
+<li><p><strong>Developer Action:</strong> Use
+<code>aom_codec_error()</code> or <code>aom_codec_error_detail()</code>
+immediately after the failure to extract a human-readable string
+containing specific debugging information.</p></li>
+</ul>
+<h3 id="best-practices-for-handling-libaom-errors">Best Practices for
+Handling libaom Errors</h3>
+<p>To prevent application crashes and memory leaks, always evaluate the
+return value of <code>aom_codec_decode()</code>. If the returned value
+is not <code>AOM_CODEC_OK</code>, logging the output of
+<code>aom_codec_error_detail()</code> is vital for diagnostics, as it
+provides a precise textual description of exactly where the AV1
+bitstream parsing or internal state machine failed.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

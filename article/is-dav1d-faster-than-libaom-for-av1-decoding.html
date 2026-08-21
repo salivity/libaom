@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is dav1d Faster Than libaom for AV1 Decoding? - libaom</title>
+    <meta name="description" content="When comparing software decoders for the AV1 video format, dav1d significantly outperforms libaom in decoding efficiency, speed, and resource utilization. While libaom serves as the official reference implementation primarily optimized for encoding resea">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/is-dav1d-faster-than-libaom-for-av1-decoding">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Is dav1d Faster Than libaom for AV1 Decoding? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/is-dav1d-faster-than-libaom-for-av1-decoding" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When comparing software decoders for the AV1 video format, dav1d significantly outperforms libaom in decoding efficiency, speed, and resource utilization. While libaom serves as the official reference implementation primarily optimized for encoding resea" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="is-dav1d-faster-than-libaom-for-av1-decoding">Is dav1d Faster
+Than libaom for AV1 Decoding?</h1>
+<p>When comparing software decoders for the AV1 video format,
+<strong>dav1d</strong> significantly outperforms <strong>libaom</strong>
+in decoding efficiency, speed, and resource utilization. While libaom
+serves as the official reference implementation primarily optimized for
+encoding research, dav1d was built from scratch by the VideoLAN and
+FFmpeg communities with a hyper-focus on speed and lightweight playback.
+This article explores how both decoders stack up across single-threaded
+performance, multi-threaded scaling, and resource consumption.</p>
+<h2 id="architectural-focus-reference-vs-production">Architectural
+Focus: Reference vs. Production</h2>
+<p>The fundamental difference between libaom and dav1d lies in their
+design objectives.</p>
+<ul>
+<li><strong>libaom:</strong> Developed by the Alliance for Open Media
+(AOM), libaom is the reference software. Its primary purpose is to
+demonstrate the full capabilities of the AV1 specification and act as a
+baseline for new encoding tools. Because it prioritizes completeness and
+encoder development, its decoding codebase is not heavily optimized for
+real-time consumer playback.</li>
+<li><strong>dav1d:</strong> Sponsored by AOM but engineered by
+open-source community experts, dav1d is tailored strictly for decoding.
+Written in assembly and highly optimized C, its goal is to make AV1
+software decoding viable on consumer hardware lacking dedicated graphics
+acceleration.</li>
+</ul>
+<h2
+id="single-threaded-speed-and-assembly-optimizations">Single-Threaded
+Speed and Assembly Optimizations</h2>
+<p>In single-threaded benchmarks, dav1d routinely outperforms libaom by
+a massive margin. Depending on the CPU architecture (such as x86_64 or
+ARM) and the specific video profile, dav1d is typically <strong>1.5x to
+over 3x faster</strong> than libaom.</p>
+<p>This drastic efficiency gain is largely due to aggressive
+Hand-written Assembly optimizations (using AVX2, SSSE3, and ARM NEON).
+While libaom includes some SIMD vectorization, dav1d covers nearly the
+entire decoding pipeline with targeted assembly instructions, lowering
+the overall clock cycles required to decode each frame.</p>
+<h2 id="multi-threaded-scaling-and-playback-fluidity">Multi-Threaded
+Scaling and Playback Fluidity</h2>
+<p>Video decoding becomes significantly more demanding at higher
+resolutions like 1080p and 4K. Dav1d introduces advanced threading
+mechanics, leveraging both frame-level and tile-level parallelism
+simultaneously.</p>
+<ul>
+<li><strong>Thread Efficiency:</strong> Dav1d scales gracefully across
+multiple CPU cores, minimizing the overhead of thread
+synchronization.</li>
+<li><strong>Performance Gap:</strong> Under multi-threaded workloads,
+dav1d can reach frame rates up to <strong>400% higher</strong> than
+libaom on identical multi-core systems.</li>
+</ul>
+<p>This scalability allows lower-end desktop processors and mobile
+chipsets to stream high-definition AV1 video smoothly without dropping
+frames, an achievement libaom struggles to match in real-time software
+execution.</p>
+<h2 id="high-bit-depth-content">High Bit-Depth Content</h2>
+<p>When it comes to 10-bit and 12-bit color depths—commonly used for HDR
+(High Dynamic Range) video—dav1d maintains its performance crown on
+modern hardware. Initial iterations of dav1d lacked comprehensive
+assembly pipelines for high bit-depth content, allowing libaom to
+occasionally compete in 10-bit processing. However, extensive
+cross-platform assembly updates have enabled dav1d to radically outpace
+libaom here as well, particularly on ARM64 mobile platforms where power
+efficiency and low battery consumption are crucial.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

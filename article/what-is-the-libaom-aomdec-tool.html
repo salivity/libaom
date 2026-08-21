@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is the libaom aomdec tool? - libaom</title>
+    <meta name="description" content="The aomdec tool is an open-source command-line utility provided by the Alliance for Open Media (AOM) as part of the libaom reference software library. It is specifically designed to decode video bitstreams encoded in the AV1 (AOMedia Video 1) format, con">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/what-is-the-libaom-aomdec-tool">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="What is the libaom aomdec tool? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/what-is-the-libaom-aomdec-tool" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The aomdec tool is an open-source command-line utility provided by the Alliance for Open Media (AOM) as part of the libaom reference software library. It is specifically designed to decode video bitstreams encoded in the AV1 (AOMedia Video 1) format, con" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="what-is-the-libaom-aomdec-tool">What is the libaom aomdec
+tool?</h1>
+<p>The <code>aomdec</code> tool is an open-source command-line utility
+provided by the Alliance for Open Media (AOM) as part of the
+<code>libaom</code> reference software library. It is specifically
+designed to decode video bitstreams encoded in the AV1 (AOMedia Video 1)
+format, converting them back into raw, uncompressed video formats like
+YUV for playback, analysis, or testing. This article explores the core
+functionality of <code>aomdec</code>, its common use cases, and how it
+fits into the broader AV1 video ecosystem.</p>
+<h2 id="core-functionality-of-aomdec">Core Functionality of aomdec</h2>
+<p>At its heart, <code>aomdec</code> serves as the official reference
+decoder for the AV1 video codec standard. When a video is encoded using
+AV1, it is compressed into a highly efficient bitstream. The
+<code>aomdec</code> tool takes this compressed file (often in an IVF,
+WebM, or OBU container) and decompresses it.</p>
+<p>The tool typically outputs raw video data, most commonly in the
+<strong>YUV format</strong> (such as YV12, I420, or high-bit-depth
+variants like I42010BLE). Because it is a reference implementation, its
+primary goal is strict adherence to the AV1 specification and absolute
+decoding accuracy, rather than being optimized for consumer real-time
+playback.</p>
+<h2 id="key-features-and-capabilities">Key Features and
+Capabilities</h2>
+<ul>
+<li><strong>Format Support:</strong> It decodes raw AV1 bitstreams, raw
+OBU (Open Bitstream Unit) files, and IVF containers, which are commonly
+used in development environments.</li>
+<li><strong>Metadata Extraction:</strong> The tool can output detailed
+information about the video stream, such as resolution, frame rate,
+color space, and bit depth.</li>
+<li><strong>Frame Limiting:</strong> Users can specify a precise number
+of frames to decode, which is useful for testing short segments of a
+massive video file.</li>
+<li><strong>Progressive Rendering Details:</strong> It can pass specific
+parameters to inspect how individual frames, tiles, and superblocks are
+being reconstructed.</li>
+</ul>
+<h2 id="common-use-cases">Common Use Cases</h2>
+<p>While everyday consumers rarely interact with <code>aomdec</code>
+directly—relying instead on media players like VLC or browser-integrated
+decoders—the tool is invaluable to specific technical audiences:</p>
+<ul>
+<li><strong>Video Engineers and Developers:</strong> Developers building
+AV1 encoders use <code>aomdec</code> to verify that their compressed
+bitstreams are compliant with the official AV1 standard. If
+<code>aomdec</code> cannot decode a file, the encoder has a bug.</li>
+<li><strong>Quality Assurance and Testing:</strong> QA teams use it to
+output raw YUV files from encoded videos to perform objective quality
+metrics (like PSNR or VMAF) against the original source video.</li>
+<li><strong>Codec Research:</strong> Academics and researchers use the
+reference decoder to study the performance, error resilience, and
+behavioral characteristics of AV1 decoding algorithms.</li>
+</ul>
+<h2 id="basic-command-usage">Basic Command Usage</h2>
+<p>In a command-line interface, using <code>aomdec</code> is
+straightforward. A typical command structure involves specifying the
+input AV1 file and the desired output file name and format:</p>
+<p><code>aomdec input_video.ivf -o output_video.yuv</code></p>
+<p>Additional flags can be appended to configure the output bit depth,
+skip a set number of frames, or force a specific rendering synthesis
+mode depending on the testing requirements.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

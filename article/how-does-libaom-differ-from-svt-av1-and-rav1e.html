@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does libaom Differ From SVT-AV1 and rav1e? - libaom</title>
+    <meta name="description" content="When choosing an encoder for the AV1 video format, developers and video engineers primarily choose between three major open-source implementations: libaom, SVT-AV1, and rav1e. While all three produce standard-compliant AV1 bitstreams, they are built with">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-differ-from-svt-av1-and-rav1e">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does libaom Differ From SVT-AV1 and rav1e? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-differ-from-svt-av1-and-rav1e" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When choosing an encoder for the AV1 video format, developers and video engineers primarily choose between three major open-source implementations: libaom, SVT-AV1, and rav1e. While all three produce standard-compliant AV1 bitstreams, they are built with" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-differ-from-svt-av1-and-rav1e">How Does libaom
+Differ From SVT-AV1 and rav1e?</h1>
+<p>When choosing an encoder for the AV1 video format, developers and
+video engineers primarily choose between three major open-source
+implementations: <strong>libaom</strong>, <strong>SVT-AV1</strong>, and
+<strong>rav1e</strong>. While all three produce standard-compliant AV1
+bitstreams, they are built with entirely different architectures,
+optimization goals, and use cases. This article breaks down their core
+differences in performance, speed, and target applications to help you
+choose the right encoder for your workflow.</p>
+<h3 id="architecture-and-backing">Architecture and Backing</h3>
+<p>The three encoders stem from different development philosophies and
+programming languages:</p>
+<ul>
+<li><strong>libaom:</strong> Developed by the Alliance for Open Media
+(AOMedia) itself, libaom is the official reference software written in
+C. It serves as the baseline implementation where new AV1 tools and
+features are first deployed and tested.</li>
+<li><strong>SVT-AV1:</strong> Developed by Intel and Netflix, the
+Scalable Video Technology (SVT) architecture is written in C. It is
+specifically designed to leverage multi-core CPUs and modern instruction
+sets (like AVX2 and AVX-512) for commercial and enterprise-scale video
+processing.</li>
+<li><strong>rav1e:</strong> Developed by Xiph.org and the Mozilla
+community, rav1e is built from the ground up in Rust. It emphasizes
+safety, code correctness, and rapid development, positioning itself as a
+lightweight alternative.</li>
+</ul>
+<h3 id="performance-and-speed-trade-offs">Performance and Speed
+Trade-offs</h3>
+<p>The practical divide between these encoders lies in their encoding
+speed and compression efficiency:</p>
+<ul>
+<li><strong>libaom</strong> provides exceptional compression efficiency
+and boasts the highest overall video quality at its deepest preset
+levels. However, it is notoriously slow, historically suffering from
+poor multi-threading capabilities, making it less ideal for real-time
+applications.</li>
+<li><strong>SVT-AV1</strong> dominates in speed and scalability. It
+splits video frames into parallel segments efficiently across massive
+thread counts. It is significantly faster than libaom and rav1e on
+multi-core servers, making it the industry favorite for high-volume
+video processing.</li>
+<li><strong>rav1e</strong> aims to be the fastest "safe" encoder but
+generally sits in the middle. It scales better than libaom across a
+moderate number of CPU threads but lacks the extreme architectural
+optimizations for massive server CPUs found in SVT-AV1.</li>
+</ul>
+<h3 id="best-use-cases-for-each-encoder">Best Use Cases for Each
+Encoder</h3>
+<ul>
+<li><strong>Choose libaom</strong> if your goal is archival encoding or
+offline processing where storage space and visual perfection matter more
+than time. It is ideal for pushing the absolute limits of the AV1
+specification.</li>
+<li><strong>Choose SVT-AV1</strong> if you are running a video-on-demand
+(VOD) platform, streaming service, or home server (like Plex or
+Jellyfin) where you need to transcode hours of video efficiently without
+stalling system resources.</li>
+<li><strong>Choose rav1e</strong> if you are integrating encoding into
+rust-based applications, require a memory-safe binary, or need a
+lightweight command-line tool for quick, reliable AV1
+experimentation.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

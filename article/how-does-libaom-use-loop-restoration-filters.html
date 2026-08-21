@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Does libaom Use Loop Restoration Filters? - libaom</title>
+    <meta name="description" content="The libaom reference encoder utilizes the AV1 loop restoration tool as a critical in-loop post-processing stage to repair coding artifacts like blurring, ringing, and edge degradation caused by lossy compression. Occurring after the deblocking filter and">
+    <link rel="canonical" href="https://salivity.github.io/libaom/article/how-does-libaom-use-loop-restoration-filters">
+    <link rel="icon" href="/libaom/favicon.ico">
+    <link rel="stylesheet" href="/libaom/css/style.css">
+    <link media="print" rel="stylesheet" href="/libaom/css/print.css">
+    <script src="/libaom/js/fuse.min.js"></script>
+    <script src="/libaom/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Does libaom Use Loop Restoration Filters? - libaom" />
+    <meta property="og:url" content="https://salivity.github.io/libaom/article/how-does-libaom-use-loop-restoration-filters" />
+    <meta property="og:image:url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/libaom/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The libaom reference encoder utilizes the AV1 loop restoration tool as a critical in-loop post-processing stage to repair coding artifacts like blurring, ringing, and edge degradation caused by lossy compression. Occurring after the deblocking filter and" />
+    <link rel="manifest" href="/libaom/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/libaom/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>libaom</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/libaom/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-does-libaom-use-loop-restoration-filters">How Does libaom
+Use Loop Restoration Filters?</h1>
+<p>The libaom reference encoder utilizes the AV1 loop restoration tool
+as a critical in-loop post-processing stage to repair coding artifacts
+like blurring, ringing, and edge degradation caused by lossy
+compression. Occurring after the deblocking filter and the Constrained
+Directional Enhancement Filter (CDEF), loop restoration allows libaom to
+mathematically restore fine details by analyzing the original source
+frame and applying specialized filtering techniques. By making highly
+granular, pixel-level corrections before a frame is added to the decoded
+frame buffer, libaom significantly improves both objective visual
+quality metrics and subjective fidelity, ensuring that future predicted
+frames have a much cleaner reference.</p>
+<h2 id="the-role-of-loop-restoration-in-the-av1-pipeline">The Role of
+Loop Restoration in the AV1 Pipeline</h2>
+<p>In video compression, lossy processes like quantization and inverse
+quantization remove spatial correlations but introduce noticeable visual
+flaws. To correct these errors, the AV1 ecosystem defines three
+sequential in-loop filters. The process follows a strict chain:</p>
+<ol type="1">
+<li><strong>Deblocking Filter:</strong> Smooths block boundaries caused
+by independent block transforms.</li>
+<li><strong>Constrained Directional Enhancement Filter (CDEF):</strong>
+Removes ringing and mosquito noise along sharp edges using directional
+low-pass filtering.</li>
+<li><strong>Loop Restoration Filter:</strong> Acts as the final, highly
+sophisticated correction layer designed to restore global sharpness and
+micro-textures.</li>
+</ol>
+<p>While the first two filters focus primarily on eliminating localized,
+structured artifacts, loop restoration explicitly aims to reverse the
+broader mathematical degradation of the entire picture. It does this by
+processing the video using configurable mathematical models on a
+per-superblock or per-restoration-unit basis.</p>
+<h2 id="the-dual-filter-arsenal-of-libaom">The Dual-Filter Arsenal of
+libaom</h2>
+<p>The libaom framework selectively implements two distinct types of
+mathematical restoration filters to combat visual fidelity loss. The
+encoder evaluates these options to choose whichever provides the best
+rate-distortion trade-off:</p>
+<h3 id="separable-wiener-filter">Separable Wiener Filter</h3>
+<p>The Wiener filter operates under the assumption that the compressed
+image is a degraded version of the original source frame corrupted by
+noise. It calculates optimal filtering coefficients to minimize the mean
+squared error between the reconstructed pixels and the original
+pixels.</p>
+<p>To keep computational complexity manageable for the decoder, AV1
+employs a 2D <strong>Separable Wiener Filter</strong>. Instead of
+processing a complex two-dimensional grid all at once, libaom uses an
+<span class="math inline">\(7\times7\)</span> symmetric filter that is
+split into separate horizontal and vertical 1D filtering operations.
+This significantly reduces the decoding math while effectively restoring
+high-frequency textures and crisp edges.</p>
+<h3 id="self-guided-restoration-filter">Self-Guided Restoration
+Filter</h3>
+<p>When a Wiener filter requires too many bits to signal its complex
+coefficients, libaom can pivot to the <strong>Self-Guided Restoration
+Filter</strong>. This method utilizes a guided filtering technique based
+on the decoded frame itself.</p>
+<p>It generates two separate filtered variations of the degraded image
+using different noise-variance parameters through a fast,
+edge-preserving smooth filter. It then combines these variations
+linearly to match the source frame as closely as possible. Because the
+decoder can independently derive much of the necessary guidance data
+directly from the reconstructed pixels, libaom only needs to transmit a
+minimal amount of parameter overhead in the bitstream.</p>
+<h2 id="granular-optimization-and-visual-impact">Granular Optimization
+and Visual Impact</h2>
+<p>A major strength of libaom's implementation is its structural
+flexibility. The encoder does not apply a blanket filter across the
+entire frame. Instead, it segments the frame into adjustable restoration
+units.</p>
+<p>For each unit, libaom runs a rate-distortion optimization (RDO) loop
+to decide whether to use the Wiener filter, the Self-Guided filter, or
+to bypass filtering entirely (passthrough mode). This level of
+granularity allows the encoder to aggressively sharpen complex textures
+in static scenes while opting for lower-overhead filtering in
+high-motion areas where fine details are harder for the human eye to
+perceive.</p>
+<p>By executing these targeted mathematical corrections before the frame
+is saved as a reference, libaom prevents artifact propagation. Cleaner
+reference frames translate directly into more accurate motion
+compensation for subsequent frames, allowing the encoder to maintain
+high visual quality at significantly reduced bitrates.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/libaom'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/libaom/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/libaom/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
