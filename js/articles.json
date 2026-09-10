@@ -1,0 +1,602 @@
+[
+  [
+    100,
+    "How Does libaom Frame Dropping Threshold Work?",
+    "The frame dropping threshold in the libaom AV1 encoder is a critical rate control mechanism designed to maintain consistent video playback quality and prevent encoder buffer underflow during real-time streaming or constrained-bandwidth encoding. By setti",
+    false
+  ],
+  [
+    99,
+    "How Does libaom Help Standardize the AV1 Codec?",
+    "This article explores the critical role that libaom, the official reference software library, plays in the standardization and development of the AV1 video codec. Maintained by the Alliance for Open Media (AOMedia), libaom serves as both the foundational",
+    false
+  ],
+  [
+    98,
+    "How to Extract Encoding Metrics From libaom?",
+    "This article provides a practical guide on how to extract real-time encoding statistics and metrics directly from libaom, the reference software encoder for the AV1 video format. It covers the specific API functions required to retrieve frame-level data,",
+    false
+  ],
+  [
+    97,
+    "How does lag-in-frames affect libaom efficiency?",
+    "The lag-in-frames setting is a crucial parameter in the libaom AV1 encoder that directly dictates how many future frames the encoder can look ahead to analyze video complexity before compressing the current frame. Adjusting this parameter significantly a",
+    false
+  ],
+  [
+    96,
+    "How Does libaom Handle 8-bit vs 12-bit Video?",
+    "This article provides a technical overview of how libaom, the reference software encoder for the AV1 video coding format, adapts to and processes different color bit depths, specifically comparing standard 8-bit depth to high-precision 10-bit and 12-bit",
+    false
+  ],
+  [
+    95,
+    "What Are Common Libaom Compilation Errors?",
+    "Integrating the AV1 video encoder library, libaom, into a development pipeline frequently introduces build-time challenges due to its strict dependency chain, specific hardware optimization requirements, and complex CMake configuration. Developers often",
+    false
+  ],
+  [
+    94,
+    "How Does Libaom Manage Code Reviews and PRs?",
+    "The libaom development team manages code reviews and contributions through a structured, highly regulated workflow centered around the Gerrit Code Review system rather than traditional GitHub pull requests. As the reference software repository for the AV",
+    false
+  ],
+  [
+    93,
+    "What future features are planned for libaom?",
+    "The open-source libaom library serves as the official reference codec software for AV1 video compression, developed and maintained by the Alliance for Open Media (AOMedia). As the AV1 ecosystem reaches a mature, maintenance-focused phase and attention tr",
+    false
+  ],
+  [
+    92,
+    "Libaom vs HEVC: Which is better at low bitrates?",
+    "Evaluating video codecs at low bitrates is crucial for optimizing streaming performance under constrained bandwidth conditions. This article provides a comparative analysis of the visual quality delivered by the Reference Encoder for AV1 (libaom) against",
+    false
+  ],
+  [
+    91,
+    "What is the Latest Stable Libaom Version Number?",
+    "The latest stable production release of the Alliance for Open Media (AOMedia) AV1 reference video codec library, libaom, is version 3.14.1. This version serves as the current maintenance milestone for the core open-source encoder and decoder implementati",
+    false
+  ],
+  [
+    90,
+    "How Does libaom Integrate With WebRTC?",
+    "The libaom library, developed by the Alliance for Open Media (AOMedia) as the reference implementation for the AV1 video codec, features deep, native integration into the WebRTC source code to power real-time software video encoding. While WebRTC applica",
+    false
+  ],
+  [
+    89,
+    "How Do Cloud Video Services Optimize Libaom?",
+    "Cloud video encoding platforms maximize the efficiency of libaom—the reference AV1 encoder software—by implementing advanced multi-threading, intelligent segmentation, and granular compression parameter adjustments. While the AV1 codec offers unmatch",
+    false
+  ],
+  [
+    88,
+    "How to Update Libaom inside an Existing FFmpeg Build?",
+    "Updating the libaom version within an existing FFmpeg build requires a partial or full recompilation of the binaries because external encoder libraries are typically compiled statically into FFmpeg. The process involves pulling the latest codebase from t",
+    false
+  ],
+  [
+    87,
+    "How Does HandBrake Use Libaom for AV1?",
+    "This article explores how the open-source video transcoder HandBrake integrates the libaom reference library to enable AV1 video encoding. We will look at the history of this integration, how HandBrake utilizes the library's CPU-based encoding algorithms",
+    false
+  ],
+  [
+    86,
+    "How Can You Wrap libaom in Python Applications?",
+    "Integrating the Alliance for Open Media's reference AV1 codec, libaom, directly into Python applications allows developers to handle high-efficiency video encoding and decoding natively. While libaom itself is written in C, Python developers can utilize",
+    false
+  ],
+  [
+    85,
+    "How Does Libaom Interact With WebM?",
+    "This article provides a technical overview of how the libaom reference encoder interacts with the WebM container format. It explores how AV1 video data produced by libaom is structured, multiplexed, and stored within WebM's Matroska-based framework. Unde",
+    false
+  ],
+  [
+    84,
+    "Which GStreamer Plugins Rely on Libaom?",
+    "The Alliance for Open Media's reference software library, libaom, is vital for encoding and decoding AV1 video streams within the GStreamer multimedia framework. GStreamer integrates this library through a dedicated extension plugin block contained withi",
+    false
+  ],
+  [
+    83,
+    "How Do Web Browsers Utilize libaom for AV1 Video Playback?",
+    "Web browsers handle AOMedia Video 1 (AV1) playback by embedding media pipelines that recognize the AV1 bitstream container, routing the video data to a capable software library or hardware API, and leveraging libraries like libaom or dav1d to parse, deco",
+    false
+  ],
+  [
+    82,
+    "How to Pass Custom Options to libaom via FFmpeg?",
+    "This article provides a practical guide on using specific FFmpeg flags to pass custom encoding options to the libaom-av1 library. When encoding video to the AV1 format using FFmpeg, the standard parameters often fall short of utilizing every advanced tun",
+    false
+  ],
+  [
+    81,
+    "How is libaom integrated into FFmpeg?",
+    "The integration of libaom into the FFmpeg multimedia framework allows users to encode high-quality video using the open-source AV1 codec. As the reference encoder developed by the Alliance for Open Media (AOMedia), libaom is accessible within FFmpeg via",
+    false
+  ],
+  [
+    80,
+    "How to Skip Film Grain Decoding in libaom?",
+    "This article provides a technical guide on how to configure the libaom AV1 reference decoder to disable film grain synthesis during the decoding process. We will look at the specific library flags, command-line arguments, and code-level configurations re",
+    false
+  ],
+  [
+    79,
+    "What error codes does libaom decoder return?",
+    "When integrating the Alliance for Open Media (AOM) libaom decoder into a video application, developers must properly handle library-specific error codes to ensure playback stability and graceful degradation. This article details the primary error codes r",
+    false
+  ],
+  [
+    78,
+    "How does libaom parse the AV1 sequence header OBU?",
+    "The AOMedia Video 1 (AV1) bitstream is structured into Open Bitstream Units (OBUs), with the Sequence Header OBU serving as the foundational block that defines global coding parameters such as profile, level, tier, and color configuration. In libaom, the",
+    false
+  ],
+  [
+    77,
+    "What is the memory footprint of libaom decoder during 4K playback?",
+    "The memory footprint of the libaom reference decoder during 4K AV1 video playback typically ranges between 150 MB and 400 MB of RAM, though it can fluctuate based on specific stream configurations and threading environments. While the libaom encoder is n",
+    false
+  ],
+  [
+    76,
+    "How to Verify MD5 Checksums of Decoded Frames in libaom?",
+    "This article provides a practical guide on how to verify the MD5 checksums of decoded video frames using the libaom reference software for the AV1 codec. We will cover the specific command-line flags required during the decoding process, how libaom handl",
+    false
+  ],
+  [
+    75,
+    "How to Extract Raw YUV with libaom Decoder?",
+    "Extracting raw YUV video from an AV1 encoded file using the reference aomdec tool (built from the libaom source) requires specifying the input file, defining the output format, and designating the destination path. By default, aomdec processes the AV1 bi",
+    false
+  ],
+  [
+    74,
+    "How Does Libaom Decoder Handle Corrupted Bitstreams?",
+    "The libaom decoder manages corrupted or incomplete AV1 video bitstreams by utilizing strict internal syntax validation, error resilience flagging, and frame-level drop mechanisms. When processing a stream laden with missing Open Bitstream Units (OBUs) or",
+    false
+  ],
+  [
+    73,
+    "What AV1 Hardware Decoding APIs Are Supported by libaom?",
+    "This article provides an overview of how the Alliance for Open Media's reference software, libaom, handles AV1 video decoding. While libaom itself is primarily a CPU-based software codec implementation, it does not directly implement hardware acceleratio",
+    false
+  ],
+  [
+    72,
+    "Is dav1d Faster Than libaom for AV1 Decoding?",
+    "When comparing software decoders for the AV1 video format, dav1d significantly outperforms libaom in decoding efficiency, speed, and resource utilization. While libaom serves as the official reference implementation primarily optimized for encoding resea",
+    false
+  ],
+  [
+    71,
+    "What is the libaom aomdec tool?",
+    "The aomdec tool is an open-source command-line utility provided by the Alliance for Open Media (AOM) as part of the libaom reference software library. It is specifically designed to decode video bitstreams encoded in the AV1 (AOMedia Video 1) format, con",
+    false
+  ],
+  [
+    70,
+    "What are the known limitations of libaom on low-power ARM devices?",
+    "Libaom, the open-source reference encoder and decoder implementation for the AV1 video format, faces major performance hurdles when deployed on low-power ARM architectures, such as those found in IoT devices, older smartphones, and entry-level single-boa",
+    false
+  ],
+  [
+    69,
+    "How Does Assembly Optimization Speed Up libaom?",
+    "Libaom, the open-source reference encoder and decoder for the AV1 video codec, relies heavily on assembly code optimization to achieve practical execution speeds. While high-level C code ensures portability and algorithmic correctness, it is inherently t",
+    false
+  ],
+  [
+    68,
+    "Why is libaom Slower Than libvpx?",
+    "This article provides an analysis of the primary factors that cause the libaom encoder to run slower than libvpx. While both encoders were developed by the Alliance for Open Media (AOMedia) and Google, libaom is the reference software for the next-genera",
+    false
+  ],
+  [
+    67,
+    "How does the realtime mode in libaom perform for live streaming?",
+    "The realtime mode in libaom—the reference AV1 encoder implementation—is designed to deliver the high compression efficiency of the AV1 codec while maintaining the low-latency and high-throughput requirements essential for live streaming and Real-Time",
+    false
+  ],
+  [
+    66,
+    "Which Profiling Tools Work Best for libaom Bottlenecks?",
+    "Analyzing performance bottlenecks in libaom, the reference AV1 video codec library, requires highly accurate profiling tools that can track microarchitectural execution, intensive CPU cycles, and multi-threaded synchronization. Because video encoding hea",
+    false
+  ],
+  [
+    65,
+    "Is libaom Faster Than x265 for Video Encoding?",
+    "When comparing modern video codecs, encoding speed is a critical factor for developers and content creators deciding between AV1 and HEVC. This article provides a direct comparison of libaom (the reference encoder for AV1) and x265 (the industry-standard",
+    false
+  ],
+  [
+    64,
+    "How Does libaom Memory Usage Change at High CPU Presets?",
+    "Understanding the memory consumption of the libaom AV1 reference encoder is critical for deploying efficient video encoding pipelines in cloud or resource-constrained environments. While libaom is historically notorious for its massive RAM footprint and",
+    false
+  ],
+  [
+    63,
+    "How Does Row-Based Multi-Threading Work in Libaom?",
+    "Row-based multi-threading (RBMT) in the libaom encoder—the reference software for the AV1 video codec—is a parallel processing technique that accelerates video encoding by distributing the processing of pixel rows within a frame across multiple CPU t",
+    false
+  ],
+  [
+    62,
+    "How Do Tile Counts Affect libaom Threading?",
+    "This article explores the direct relationship between tile configuration and multi-threading efficiency in the libaom AV1 encoder library. It covers how partitioning video frames into independent horizontal and vertical columns allows the encoder to dist",
+    false
+  ],
+  [
+    61,
+    "How Does libaom Multi-Threading Work?",
+    "The libaom encoder maximizes CPU performance and accelerates the computationally intensive AV1 video encoding process through a multi-tiered parallel execution model. By combining tile-based, row-based, and frame-parallel processing techniques, libaom sp",
+    false
+  ],
+  [
+    60,
+    "How Does libaom AV1 Encode Global Motion Estimation?",
+    "This article provides an overview of the Global Motion Estimation (GME) process within the Alliance for Open Media's reference encoder, libaom, for the AV1 video codec. It covers the core algorithmic pipeline, from initial feature detection and keypoint",
+    false
+  ],
+  [
+    59,
+    "How Does libaom Use Loop Restoration Filters?",
+    "The libaom reference encoder utilizes the AV1 loop restoration tool as a critical in-loop post-processing stage to repair coding artifacts like blurring, ringing, and edge degradation caused by lossy compression. Occurring after the deblocking filter and",
+    false
+  ],
+  [
+    58,
+    "What CDEF Methods Are Used by libaom?",
+    "The libaom reference software implements the Constrained Directional Enhancement Filter (CDEF) to post-process reconstructed video frames and eliminate ringing artifacts while preserving sharp edge details. To achieve this, libaom uses a multi-step proce",
+    false
+  ],
+  [
+    57,
+    "How Does Libaom Implement Palette Prediction?",
+    "Libaom, the reference software encoder for the AV1 video coding format, implements palette prediction as a specialized intra-coding tool designed to dramatically improve compression efficiency for screen content, such as computer desktops, text, and user",
+    false
+  ],
+  [
+    56,
+    "What AV1 Transform Types Does Libaom Support?",
+    "The AV1 video coding format utilizes a highly flexible set of transform blocks to efficiently compress residual data by converting spatial pixels into frequency coefficients. During the encoding process, the reference encoder, libaom, supports and evalua",
+    false
+  ],
+  [
+    55,
+    "How Does libaom Encode Alpha Channels?",
+    "This article provides a technical overview of how libaom, the reference software encoder for the AV1 video format, handles the encoding of alpha channels (transparency). It explores the mechanics of auxiliary video streams, the separation of color and tr",
+    false
+  ],
+  [
+    54,
+    "What is the Libaom Super-Resolution Feature?",
+    "The libaom video codec library, the reference encoder implementation for the AV1 video format, includes a built-in super-resolution feature designed to optimize encoding efficiency and visual quality at low bitrates. By encoding video frames at a lower r",
+    false
+  ],
+  [
+    53,
+    "How Does libaom Use Warped Motion Compensation?",
+    "Libaom, the open-source reference encoder for the AV1 video codec, leverages warped motion compensation (WMC) to significantly improve compression efficiency by addressing complex, non-translational motion. Traditional video encoders typically account fo",
+    false
+  ],
+  [
+    52,
+    "How to Control Directional Intra-Prediction in libaom?",
+    "The libaom reference encoder for AV1 leverages directional intra-prediction to drastically maximize compression efficiency by analyzing spatial textures across 56 distinct angles. Because analyzing these granular prediction paths is computationally expen",
+    false
+  ],
+  [
+    51,
+    "How does libaom implement AV1 film grain synthesis?",
+    "Libaom, the reference encoder implementation for the AV1 video format, implements film grain synthesis by separating film grain from the underlying video content at the encoder side and transmitting mathematical modeling parameters instead of the raw noi",
+    false
+  ],
+  [
+    50,
+    "How Does libaom Manage CBR Buffer Size?",
+    "In video streaming and real-time communication, managing data delivery to prevent network congestion or playback stuttering is paramount. The reference AV1 encoder, libaom, implements a precise rate control mechanism to regulate the bitstream when config",
+    false
+  ],
+  [
+    49,
+    "What Is the Libaom Undershoot-pct Parameter?",
+    "The undershoot-pct parameter in the libaom AV1 encoder plays a critical role in rate control by defining the maximum allowed bitrate undershoot as a percentage of the target data rate. Adjusting this value directly alters how aggressively the encoder dro",
+    false
+  ],
+  [
+    48,
+    "How to Configure Min and Max Quantizer in libaom?",
+    "Configuring the minimum and maximum quantizer bounds allows video engineers to maintain precise control over video quality and file sizes during AV1 encoding. This article provides a comprehensive overview of how to set these limits using the native aome",
+    false
+  ],
+  [
+    47,
+    "How Does libaom Detect Scene Cuts for Keyframe Placement?",
+    "The libaom reference encoder for AV1 uses a combination of multi-pass temporal analysis, visual difference metrics, and lookahead buffering to dynamically detect scene cuts and optimize keyframe placement. By identifying abrupt transitions or major shift",
+    false
+  ],
+  [
+    46,
+    "How Does libaom Calculate SSIM Internally?",
+    "This article provides a technical overview of how libaom (the reference software encoder for the AV1 video format) calculates Structural Similarity (SSIM) internally during its rate control process. It explores the downsampling techniques, patch-based lu",
+    false
+  ],
+  [
+    45,
+    "Max Bitrate Spikes in libaom VBR Encode",
+    "This article explains how to control and limit maximum bitrate spikes when using the libaom AV1 encoder in Variable Bitrate (VBR) mode. It covers the essential configuration parameters—specifically end-usage, target-bitrate, max-bitrate, buf-sz, buf-in",
+    false
+  ],
+  [
+    44,
+    "How Does Libaom Handle Constrained Quality Mode?",
+    "Constrained Quality (CQ) mode in the libaom AV1 reference encoder balances perceptual video quality and file size constraints by combining a variable Constant Rate Factor (CRF) target with a hard upper bitrate cap. This article explains how libaom proces",
+    false
+  ],
+  [
+    43,
+    "What is the Difference Between VBR and CBR in libaom?",
+    "When encoding video using the AV1 codec via libaom (the reference encoder implementation), choosing the right rate control mode is critical for balancing visual quality and file size. The fundamental difference lies in how bitrate is allocated: Constant",
+    false
+  ],
+  [
+    42,
+    "How Does Libaom Perform Two-Pass Encoding?",
+    "Libaom, the reference encoder implementation for the AV1 video codec, achieves optimal bitrate distribution through a rigorous two-pass encoding process. The first pass acts as an analytical phase, scanning the entire video to gather critical statistics",
+    false
+  ],
+  [
+    41,
+    "What Rate Control Algorithms Are in libaom?",
+    "The libaom reference encoder for the AV1 video coding format implements several distinct rate control algorithms designed to balance visual quality and data consumption across various streaming, broadcasting, and archival scenarios. Operating at the sequ",
+    false
+  ],
+  [
+    40,
+    "How to Pass Tune Settings to Libaom",
+    "This article provides a concise guide on how to pass specific encoding tune settings, such as tune=ssim or tune=psychovisual, to the libaom AV1 encoder. We will look at how to achieve this using popular command-line tools like FFmpeg, as well as the nati",
+    false
+  ],
+  [
+    39,
+    "What are the default libaom settings out of the box?",
+    "The libaom reference encoder for the AV1 video format applies a specific set of stock configurations designed to prioritize maximum compression efficiency and quality metric optimization rather than processing speed. Out of the box, libaom operates under",
+    false
+  ],
+  [
+    38,
+    "How to Configure libaom to Output an IVF File?",
+    "Configuring the libaom encoder to output an IVF (Indeo Video Format) file is a straightforward process that primarily depends on how you interface with the encoder. Because libaom is the reference software library for the AV1 video coding format, it is m",
+    false
+  ],
+  [
+    37,
+    "What is the cq-level parameter in libaom?",
+    "The cq-level (Constrained Quality level) parameter in libaom—the reference encoder for the AV1 video codec—is a critical setting used to control video quality and file size when encoding in Constrained Quality (CQ) mode. This parameter allows users t",
+    false
+  ],
+  [
+    36,
+    "How to Set Tile Rows and Columns in Libaom?",
+    "When encoding video with the AV1 codec using libaom, managing how a frame is split into grids—known as tiles—is crucial for multi-threaded performance and hardware decoding efficiency. This article explains how to explicitly specify the number of til",
+    false
+  ],
+  [
+    35,
+    "How to Encode 10-bit Video with libaom?",
+    "Encoding high-quality 10-bit AV1 video using the libaom-av1 encoder requires explicitly defining the bit depth, pixel format, and profile to ensure the encoder doesn't default to standard 8-bit output. This article covers the essential FFmpeg command-lin",
+    false
+  ],
+  [
+    34,
+    "How to Encode Specific Frames Using Libaom?",
+    "Encoding a specific subset of frames from an input video file using libaom (the reference encoder for the AV1 video format) allows you to test encoding settings, generate short previews, or split processing workloads without rendering the entire file. Th",
+    false
+  ],
+  [
+    33,
+    "What is the difference between good and realtime deadline modes in libaom?",
+    "When encoding video using the AV1 codec via libaom, choosing the right deadline mode is critical for balancing processing speed and visual quality. This article breaks down the fundamental differences between the good and realtime deadline settings, expl",
+    false
+  ],
+  [
+    32,
+    "How to Set libaom CPU-Used Parameter?",
+    "Optimizing the cpu-used parameter in the libaom AV1 encoder is essential for balancing encoding speed and visual quality. This article covers what the cpu-used parameter does, how its values affect your encoding workflow, and practical command-line examp",
+    false
+  ],
+  [
+    31,
+    "What is the aomenc tool included with libaom?",
+    "The aomenc tool is the official, command-line video encoder provided by the Alliance for Open Media (AOM) as part of the libaom reference software library. It is specifically designed to compress raw video files into the highly efficient AV1 (AOMedia Vid",
+    false
+  ],
+  [
+    30,
+    "How Does Libaom Handle Color Spaces?",
+    "This article provides a technical overview of how libaom, the reference software library for the AV1 video codec, defines and manages color spaces and pixel formats. It explores the internal enumerations used for color primaries, transfer characteristics",
+    false
+  ],
+  [
+    29,
+    "What Is the Maximum Resolution Supported by Libaom?",
+    "The libaom library is the official open-source reference encoder and decoder implementation for the AV1 video coding format, developed by the Alliance for Open Media (AOMedia). Under the AV1 bitstream specification, the architecture supports a maximum vi",
+    false
+  ],
+  [
+    28,
+    "How does libaom use platform SIMD intrinsics?",
+    "The libaom video codec library leverages platform-specific Single Instruction, Multiple Data (SIMD) intrinsics through a combination of modular source file isolation, build-time configuration, and dynamic runtime CPU feature detection. Because video enco",
+    false
+  ],
+  [
+    27,
+    "What Error Handling Mechanisms Does libaom C API Provide?",
+    "The libaom C API—the reference software library for the AV1 video codec—manages errors primarily through a status-code return system supplemented by detailed error message strings. Because it is written in C, it eschews modern exception handling in f",
+    false
+  ],
+  [
+    26,
+    "How Does libaom Manage State Between Sequential Encodes?",
+    "The AV1 Reference Encoder (libaom) manages state between sequential frame encodes by utilizing a centralized encoder context structure that tracks temporal dependencies, rate control metrics, and reference frame buffers. By maintaining a continuous pipel",
+    false
+  ],
+  [
+    25,
+    "What is the role of aom_codec_enc_cfg_t in libaom?",
+    "The aomcodecenccfgt structure in libaom serves as the primary configuration blueprint for the AV1 video encoder, dictating how the codec initializes and behaves during the encoding process. This structure aggregates a wide array of parameters, ranging fr",
+    false
+  ],
+  [
+    24,
+    "How Does Libaom Handle Memory Allocation?",
+    "This article explores the internal memory management mechanisms of libaom, the open-source reference software codec library for the AV1 video format maintained by the Alliance for Open Media (AOMedia). It breaks down how the library allocates, tracks, an",
+    false
+  ],
+  [
+    23,
+    "What Internal Data Structures Does libaom Use for Video Frames?",
+    "The libaom library, the open-source reference encoder and decoder for the AV1 video codec developed by the Alliance for Open Media, relies on a sophisticated hierarchy of internal data structures to manage, manipulate, and optimize video frame data durin",
+    false
+  ],
+  [
+    22,
+    "How Is the libaom API Structured for Integration?",
+    "Integrating the libaom AV1 codec library into an external application requires navigating its highly structured, state-driven C API. This article provides a comprehensive overview of the libaom API architecture, detailing how host applications initialize",
+    false
+  ],
+  [
+    21,
+    "What Languages Make Up the Libaom Codebase?",
+    "The libaom codebase, which serves as the open-source reference software implementation for the AV1 video codec by the Alliance for Open Media (AOMedia), is primarily composed of the C programming language. C forms the vast majority of the repository, han",
+    false
+  ],
+  [
+    20,
+    "How to integrate libaom into Android NDK?",
+    "Integrating the libaom library into an Android NDK project allows developers to encode and decode AV1 video natively within their applications. This process involves setting up the Android NDK environment, fetching the libaom source code, configuring the",
+    false
+  ],
+  [
+    19,
+    "How to Build libaom as a Shared Library?",
+    "Building the Alliance for Open Media (AOM) AV1 codec library (libaom) as a shared library (.so, .dylib, or .dll) instead of the default static library (.a or .lib) requires passing a specific flag to CMake during the configuration process. By default, th",
+    false
+  ],
+  [
+    18,
+    "Linux Dependencies Required to Compile libaom?",
+    "Compiling libaom (the Alliance for Open Media AV1 codec library) from source on Linux requires a specific set of development tools, build systems, and an assembler to optimize performance. This guide outlines the essential packages needed for a successfu",
+    false
+  ],
+  [
+    17,
+    "How to Disable Libaom Decoder for Encoder-Only Build",
+    "This article provides a step-by-step guide on how to configure and build the Alliance for Open Media (AOM) AV1 codec library (libaom) as an encoder-only library by disabling its decoder functionality. By modifying the CMake configuration flags during the",
+    false
+  ],
+  [
+    16,
+    "Which Testing Frameworks Are Used in Libaom?",
+    "The libaom build system, which is the reference software library for the AV1 video codec, integrates specific testing frameworks to ensure code quality, performance, and stability across different platforms. This article provides an overview of the prima",
+    false
+  ],
+  [
+    15,
+    "How to Cross-Compile libaom for ARM?",
+    "Cross-compiling libaom (the Alliance for Open Media AV1 codec library) for ARM architectures allows you to build efficient video encoding and decoding software for embedded devices, smartphones, and Raspberry Pi boards from a standard x8664 host machine.",
+    false
+  ],
+  [
+    14,
+    "What Compiler Flags Optimize Libaom Performance?",
+    "Building a highly optimized libaom binary is essential for achieving faster AV1 video encoding and decoding speeds. Because AV1 encoding is notoriously CPU-intensive, leveraging the right compiler flags allows GNU Compiler Collection (GCC) and Clang to f",
+    false
+  ],
+  [
+    13,
+    "How to Enable libaom Assembly Optimizations?",
+    "Enabling assembly optimizations when compiling the libaom library—the reference encoder for the AV1 video format—is crucial for achieving acceptable encoding and decoding speeds. By default, the build system (CMake) attempts to auto-detect your CPU a",
+    false
+  ],
+  [
+    12,
+    "What Are the Minimum System Requirements to Build libaom?",
+    "Building libaom, the open-source reference software codec library for encoding and decoding AV1 video streams, requires a specific set of hardware capabilities and software dependencies. While the library can be compiled on most modern operating systems,",
+    false
+  ],
+  [
+    11,
+    "How to Compile libaom from Source Using CMake?",
+    "Compiling libaom (the reference encoder/decoder for the AV1 video format) from source allows you to leverage the latest performance optimizations and features. This guide provides a straightforward, step-by-step walkthrough for cloning the official repos",
+    false
+  ],
+  [
+    10,
+    "How to Find libaom API Developer Documentation?",
+    "Integrating the Alliance for Open Media (AOMedia) AV1 reference library (libaom) requires navigating various technical resources. This article provides a comprehensive overview of the official and community-driven documentation available to developers, i",
+    false
+  ],
+  [
+    9,
+    "How Often Do Stable Libaom Releases Come Out?",
+    "Libaom stable software releases follow a consistent development lifecycle designed to bring performance enhancements, optimization updates, and critical bug fixes to production environments. Maintained by the Alliance for Open Media (AOMedia) Codec Worki",
+    false
+  ],
+  [
+    8,
+    "Why Does the Libaom Reference Implementation Exist?",
+    "The libaom library is the official reference software implementation for the AV1 video compression format, developed by the Alliance for Open Media (AOMedia). Unlike production-first encoders designed primarily for commercial speed, libaom serves as the",
+    false
+  ],
+  [
+    7,
+    "How to Contribute Code and Report Bugs in libaom?",
+    "This article provides a straightforward guide for developers looking to contribute to the libaom repository, the reference software codec library for AV1. It covers the essential steps for setting up your environment, reporting bugs effectively, and subm",
+    false
+  ],
+  [
+    6,
+    "How Did libaom Evolve From VP9?",
+    "The transition from the VP9 video codec to the Reference Software for AV1, known as libaom, represents a monumental shift in the history of open-source video compression. Developed by the Alliance for Open Media (AOMedia), libaom was built directly upon",
+    false
+  ],
+  [
+    5,
+    "How Does libaom Relate to the Alliance for Open Media?",
+    "This article explains the direct relationship between libaom and the Alliance for Open Media (AOMedia). It details how libaom serves as the official, open-source reference software implementation for the AV1 video codec, a royalty-free video format devel",
+    false
+  ],
+  [
+    4,
+    "What Open-Source License Governs the Libaom Library?",
+    "The libaom library, which serves as the reference software implementation for the AV1 video codec developed by the Alliance for Open Media (AOMedia), is primarily governed by the Alliance for Open Media Patent License 1.0 alongside the BSD 2-Clause Licen",
+    false
+  ],
+  [
+    3,
+    "How Does libaom Differ From SVT-AV1 and rav1e?",
+    "When choosing an encoder for the AV1 video format, developers and video engineers primarily choose between three major open-source implementations: libaom, SVT-AV1, and rav1e. While all three produce standard-compliant AV1 bitstreams, they are built with",
+    false
+  ],
+  [
+    2,
+    "Who contributes to the libaom open-source project?",
+    "The libaom open-source project is the official reference software library for encoding and decoding the AV1 video format. It is primarily developed and maintained by the Alliance for Open Media (AOMedia), a consortium of tech giants, alongside independen",
+    false
+  ],
+  [
+    1,
+    "What Is the Primary Purpose of libaom?",
+    "This article provides an overview of libaom, the reference software library for the AV1 video codec. It explains its primary purpose in video compression, explores its core functionalities, and discusses its significance in the modern digital streaming l",
+    false
+  ]
+]
